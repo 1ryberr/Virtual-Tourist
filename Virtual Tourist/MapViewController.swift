@@ -27,7 +27,7 @@ class MapViewController: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation(press:)))
         mapView.addGestureRecognizer(longPress)
         
@@ -39,7 +39,7 @@ class MapViewController: UIViewController{
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-       removePinCoordinates()
+        removePinCoordinates()
     }
     
     func pinCoordinates(_ coordinates: CLLocationCoordinate2D) {
@@ -91,18 +91,18 @@ class MapViewController: UIViewController{
     
     func processPhoto(_ newPhoto:[Photo]) {
         if deleteLabel.isHidden{
-
+            
             let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
             let viewController = storyboard.instantiateViewController(withIdentifier: "PhotoViewController") as! PhotoViewController
             viewController.hasPhotos = !newPhoto.isEmpty
             viewController.coordinates = self.coordinates
             self.navigationController?.pushViewController(viewController, animated: true)
         }
-            
+        
     }
     
     @IBAction func editBtn(_ sender: Any) {
-     deleteLabel.isHidden = !deleteLabel.isHidden
+        deleteLabel.isHidden = !deleteLabel.isHidden
         if deleteLabel.isHidden == true{
             
         }
@@ -142,16 +142,17 @@ extension MapViewController: MKMapViewDelegate{
         if !newPhoto.isEmpty && !deleteLabel.isHidden{
             for photo in newPhoto{
                 managedObjectContext.delete(photo)
-                managedObjectContext.delete(singlePin)
-                if let annotations = view.annotation{
-                    mapView.removeAnnotation(annotations)
-                }
-                print(singlePin)
-                save()
             }
+            managedObjectContext.delete(singlePin)
+            if let annotations = view.annotation{
+                mapView.removeAnnotation(annotations)
+            }
+            print(singlePin)
+            save()
+            
         }else{
-        
-        processPhoto(newPhoto)
+            
+            processPhoto(newPhoto)
         }
     }
     

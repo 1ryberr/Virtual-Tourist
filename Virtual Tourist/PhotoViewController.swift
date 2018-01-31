@@ -28,8 +28,7 @@ class PhotoViewController: UIViewController{
     var pin = [Pin]()
     let imageCache = NSCache<NSString, UIImage>()
     var img : UIImage!
-    
-    
+    var longPressGesture: UILongPressGestureRecognizer!
     
     override func viewWillAppear(_ animated: Bool) {
         if !hasPhotos{
@@ -41,6 +40,10 @@ class PhotoViewController: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongGesture(gesture:)))
+        collectionView.addGestureRecognizer(longPressGesture)
+        
+        
         managedObjectContext = CoreDataStack().persistentContainer.viewContext
         loadPinData(latitude: coordinates.latitude, longitude: coordinates.longitude)
         let annotation = MKPointAnnotation()
@@ -51,6 +54,28 @@ class PhotoViewController: UIViewController{
         // let dataPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         //print(dataPath)
     }
+    @objc func handleLongGesture(gesture: UILongPressGestureRecognizer) {
+        switch(gesture.state) {
+            
+        case .began:
+            guard let selectedIndexPath = collectionView.indexPathForItem(at: gesture.location(in: collectionView)) else {
+                break
+            }
+            collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+        case .changed:
+            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
+        case .ended:
+            collectionView.endInteractiveMovement()
+        default:
+            collectionView.cancelInteractiveMovement()
+        }
+        
+    }
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         saveData.removeAll()
@@ -378,5 +403,13 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
         
     }
     
+    
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        print("Starting Index:  \(sourceIndexPath.item)" )
+           print("Ending Index: \(destinationIndexPath.item)")
+    }
+    
+
 }
+
 

@@ -30,6 +30,7 @@ class PhotoViewController: UIViewController{
     var img : UIImage!
     var longPressGesture: UILongPressGestureRecognizer!
     
+    
     override func viewWillAppear(_ animated: Bool) {
         if !hasPhotos{
             flickrUpDateBatch()
@@ -51,9 +52,12 @@ class PhotoViewController: UIViewController{
         mapView.addAnnotation(annotation)
         setMapRegion(for: coordinates, animated: true, mapView)
         
+        
         // let dataPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         //print(dataPath)
     }
+    
+    
     @objc func handleLongGesture(gesture: UILongPressGestureRecognizer) {
         switch(gesture.state) {
             
@@ -71,11 +75,10 @@ class PhotoViewController: UIViewController{
         }
         
     }
+    
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
-    
     
     override func viewWillDisappear(_ animated: Bool) {
         saveData.removeAll()
@@ -106,12 +109,10 @@ class PhotoViewController: UIViewController{
         
     }
     
-    
     func setMapRegion(for location: CLLocationCoordinate2D, animated: Bool, _ mapView: MKMapView){
         let viewRegion = MKCoordinateRegionMakeWithDistance(location,60000, 60000)
         mapView.setRegion(viewRegion, animated: animated)
     }
-    
     
     @objc func savePinData(){
         newCollectionBtn.isEnabled = true
@@ -147,7 +148,6 @@ class PhotoViewController: UIViewController{
         dataArray.removeAll()
         
     }
-    
     
     func save(){
         
@@ -345,8 +345,6 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath) as! PhotoCollectionViewCell
-        cell.layer.borderWidth = 1
-        cell.layer.cornerRadius = 6
         
         if !hasPhotos{
             var spinnerView: UIView!

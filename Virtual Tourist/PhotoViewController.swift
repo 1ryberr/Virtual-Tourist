@@ -56,7 +56,10 @@ class PhotoViewController: UIViewController{
         // let dataPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         //print(dataPath)
     }
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        saveData.removeAll()
+        images.removeAll()
+    }
     
     @objc func handleLongGesture(gesture: UILongPressGestureRecognizer) {
         switch(gesture.state) {
@@ -80,10 +83,7 @@ class PhotoViewController: UIViewController{
         return true
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        saveData.removeAll()
-        images.removeAll()
-    }
+   
     
     func loadPinData(latitude: Double, longitude: Double) {
         
@@ -184,6 +184,7 @@ class PhotoViewController: UIViewController{
             }
             MapViewController.removeSpinner(spinner: spinnerView)
             DispatchQueue.main.async{
+                self.hasPhotos = false
                 self.collectionView.reloadData()
             }
         })
@@ -231,10 +232,12 @@ class PhotoViewController: UIViewController{
                 }
                 
             }
+        
             flickrUpDateBatch()
         }, completion: nil)
         
-        hasPhotos = false
+        hasPhotos = true
+        images.removeAll()
         array.removeAll()
         twoDArray.removeAll()
         
@@ -294,11 +297,12 @@ class PhotoViewController: UIViewController{
             if images.isEmpty && hasPhotos{
                 if !array.isEmpty && !((twoDArray?.isEmpty)!){
                     batchUpdate(array, twoDArray,&photo)
+                   print(images)
                 }
                 
             }
         }, completion: nil)
-        
+        print(images)
         twoDArray?.removeAll()
         array.removeAll()
         newCollectionBtn.isHidden = false
@@ -337,6 +341,7 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
         if !hasPhotos {
             noImages.isHidden = !(self.images.count == 0)
             newCollectionBtn.isEnabled = !(self.images.count == 0)
+            print(images.count)
             return images.count
         }else{
             return photo.count
@@ -350,7 +355,8 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             var spinnerView: UIView!
             spinnerView = MapViewController.displaySpinner(onView: cell)
             DispatchQueue.global(qos:.userInitiated).async {
-                let imageURL = URL(string:self.images[indexPath.row])
+                
+                let imageURL = URL(string:self.images[indexPath.item])
                 if let imageFromCache = self.imageCache.object(forKey: ((imageURL?.absoluteString)! + "\(indexPath.row)") as NSString) {
                     self.img = imageFromCache
                 }else{

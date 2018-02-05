@@ -20,5 +20,6 @@ class PhotoCollectionViewCell: UICollectionViewCell {
         self.clipsToBounds = false
         
     }
+
     
 }

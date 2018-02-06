@@ -8,14 +8,16 @@
 
 import UIKit
 
+
 class FlickrClient: NSObject {
     
     static let sharedInstance = FlickrClient()
     private override init() {}
     var imageURL: URL!
     var imageData: Data!
+   
     
-    fileprivate func collectData( _ photoArray: [[String : AnyObject]])->[String] {
+    func collectData( _ photoArray: [[String : AnyObject]])->[String] {
         var image = [String]()
         var photoDictionary:[String:AnyObject]!
         for i in 0..<photoArray.count{
@@ -27,19 +29,17 @@ class FlickrClient: NSObject {
             
            image.append(imageUrlString)
         }
-        
-
-    
     return image
 }
 
 
 func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @escaping (_ myImages: [String]?, _ error: NSError?) -> Void) -> URLSessionDataTask{
+    
     let url = URL(string: url)!
     let request = URLRequest(url: url)
     let session = URLSession.shared
+    
     let task = session.dataTask(with: request) { (data, response, error) in
-        
         
         func sendError(_ error: String) {
             print(error)

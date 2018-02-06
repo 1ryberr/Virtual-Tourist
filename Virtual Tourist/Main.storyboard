@@ -123,6 +123,7 @@
                                 <connections>
                                     <outlet property="dataSource" destination="ByN-NJ-7zc" id="d45-8A-0oK"/>
                                     <outlet property="delegate" destination="ByN-NJ-7zc" id="L5O-TX-5f9"/>
+                                    <outlet property="prefetchDataSource" destination="ByN-NJ-7zc" id="hA9-Em-np4"/>
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nz4-nt-hD6">

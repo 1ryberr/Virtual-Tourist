@@ -17,6 +17,7 @@ class MapViewController: UIViewController{
     var managedObjectContext: NSManagedObjectContext!
     var photo = [Photo]()
     var pin = [Pin]()
+    var newPin = [Pin]()
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var deleteLabel: UILabel!
     
@@ -30,7 +31,7 @@ class MapViewController: UIViewController{
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation(press:)))
         mapView.addGestureRecognizer(longPress)
-        
+    
     }
     
     func removePinCoordinates() {
@@ -55,6 +56,23 @@ class MapViewController: UIViewController{
             let coordinates = mapView.convert(longTouchPoint, toCoordinateFrom: mapView)
             pinCoordinates(coordinates)
         }
+    }
+    
+    func loadPinData(latitude: Double, longitude: Double) {
+        
+        let pinRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
+        pinRequest.fetchLimit = 1
+        pinRequest.returnsObjectsAsFaults = false
+        pinRequest.predicate = NSPredicate(format: "latitude == %@ && longitude == %@" , argumentArray: [latitude,longitude])
+        
+        do{
+            newPin = try managedObjectContext.fetch(pinRequest)
+            
+        }catch{
+            
+            print("caught an error\(error)")
+        }
+        
     }
     
     func loadPinData() {
@@ -89,12 +107,12 @@ class MapViewController: UIViewController{
         }
     }
     
-    func processPhoto(_ newPhoto:[Photo]) {
+    func processPhoto(_ newPin:[Pin]) {
         if deleteLabel.isHidden{
             
             let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
             let viewController = storyboard.instantiateViewController(withIdentifier: "PhotoViewController") as! PhotoViewController
-            viewController.hasPhotos = !newPhoto.isEmpty
+            viewController.hasPhotos = !newPin.isEmpty
             viewController.coordinates = self.coordinates
             self.navigationController?.pushViewController(viewController, animated: true)
         }
@@ -128,32 +146,24 @@ extension MapViewController: MKMapViewDelegate{
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        var singlePin: Pin!
-        var newPhoto = [Photo]()
         coordinates = view.annotation?.coordinate
+        loadPinData(latitude: coordinates.latitude, longitude: coordinates.longitude)
         
-        for i in 0..<pin.count{
-            if pin[i].latitude == coordinates.latitude && pin[i].longitude == coordinates.longitude{
-                singlePin = pin[i]
-                photo.swapAt(0, i)
-                newPhoto = photo.filter{$0.pin?.objectID == pin[i].objectID}
-            }
-        }
-        if !newPhoto.isEmpty && !deleteLabel.isHidden{
-            for photo in newPhoto{
-                managedObjectContext.delete(photo)
-            }
-            managedObjectContext.delete(singlePin)
-            if let annotations = view.annotation{
-                mapView.removeAnnotation(annotations)
-            }
-            print(singlePin)
-            save()
-            
-        }else{
-            
-            processPhoto(newPhoto)
-        }
+//        if !newPhoto.isEmpty && !deleteLabel.isHidden{
+//            for photo in newPhoto{
+//                managedObjectContext.delete(photo)
+//            }
+//            managedObjectContext.delete(newPin[0])
+//            if let annotations = view.annotation{
+//                mapView.removeAnnotation(annotations)
+//            }
+//            print(newPin)
+//            save()
+//
+//        }else{
+        
+            processPhoto(newPin)
+   //    }
     }
     
 }
@@ -162,7 +172,7 @@ extension MapViewController {
     
     class func displaySpinner(onView : UIView) -> UIView {
         let spinnerView = UIView.init(frame: onView.bounds)
-        spinnerView.backgroundColor = UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
+        spinnerView.backgroundColor = UIColor.darkGray//UIColor.init(red: 0.5, green: 0.5, blue: 0.5, alpha: 0.5)
         
         let ai = UIActivityIndicatorView.init(activityIndicatorStyle: .whiteLarge)
         ai.startAnimating()

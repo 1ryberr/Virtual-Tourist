@@ -82,8 +82,6 @@ class PhotoViewController: UIViewController{
         return true
     }
     
-    
-    
     func loadPinData(latitude: Double, longitude: Double) {
         var photo = [Photo]()
         let pinRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
@@ -99,17 +97,15 @@ class PhotoViewController: UIViewController{
             photo = try managedObjectContext.fetch(photoRequest)
             
             if images.isEmpty && hasPhotos{
-                for i in 0..<photo.count{
-                    if photo[i].pin?.objectID == pin[0].objectID{
-                       newPhoto.append(photo[i])
-                    }
-                    
+                
+                for image in photo where image.pin?.objectID == pin[0].objectID{
+                    newPhoto.append(image)
                 }
+                
             }
             
             newPhoto = Array(Set(newPhoto))
-             //  print(newPhoto.count)
-            
+        
         }catch{
             print("caught an error\(error)")
         }
@@ -135,16 +131,14 @@ class PhotoViewController: UIViewController{
         }
         if !saveData.isEmpty{
             save()
-        }else{
-            if !pin.isEmpty{
+        }else if !pin.isEmpty{
                 managedObjectContext.delete(pin[0])
                 save()
-            }
+             newCollectionBtn.isEnabled = true
             navigationController?.popViewController(animated: true)
-        }
+            }
         
-        newCollectionBtn.isEnabled = true
-    }
+        }
     
     func save(){
         
@@ -173,27 +167,27 @@ class PhotoViewController: UIViewController{
             if let myImage = myImage{
                 self.images = Array(Set(myImage))
                 print("Printed from flickr method \(self.images.count)")//print statement
-                if case 22...43 = self.images.count{
-                    self.images = Array(self.images[22..<self.images.count])
-                }else if case 43...64 = self.images.count {
-                    self.images = Array(self.images[43..<self.images.count])
-                }else if case 65...87 = self.images.count {
-                    self.images = Array(self.images[65..<self.images.count])
-                }else if case 88...110 = self.images.count {
-                    self.images = Array(self.images[88..<self.images.count])
-                }else if case 110...131 = self.images.count {
-                    self.images = Array(self.images[110..<self.images.count])
-                }else if case 131...152 = self.images.count {
-                    self.images = Array(self.images[131..<self.images.count])
-                }else if case 153...174 = self.images.count {
-                    self.images = Array(self.images[153..<self.images.count])
-                }else if case 174...195 = self.images.count {
-                    self.images = Array(self.images[174..<self.images.count])
-                }else if case 196...217 = self.images.count {
-                    self.images = Array(self.images[196..<self.images.count])
-                }else if case 218...239 = self.images.count {
-                    self.images = Array(self.images[218..<self.images.count])
-                }else if case 240...250 = self.images.count {
+                if case 19...40 = self.images.count {
+                    self.images = Array(self.images[19..<self.images.count])
+                }else if case 40...61 = self.images.count {
+                    self.images = Array(self.images[40..<self.images.count])
+                }else if case 61...82 = self.images.count {
+                    self.images = Array(self.images[61..<self.images.count])
+                }else if case 82...103 = self.images.count {
+                    self.images = Array(self.images[82..<self.images.count])
+                }else if case 103...124 = self.images.count {
+                    self.images = Array(self.images[103..<self.images.count])
+                }else if case 124...145 = self.images.count {
+                    self.images = Array(self.images[124..<self.images.count])
+                }else if case 145...166 = self.images.count {
+                    self.images = Array(self.images[145..<self.images.count])
+                }else if case 166...187 = self.images.count {
+                    self.images = Array(self.images[166..<self.images.count])
+                }else if case 187...208 = self.images.count {
+                    self.images = Array(self.images[187..<self.images.count])
+                }else if case 208...229 = self.images.count {
+                    self.images = Array(self.images[208..<self.images.count])
+                }else if case 229...250 = self.images.count {
                     self.images = Array(self.images[229..<self.images.count])
                 }
             }
@@ -332,13 +326,15 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath) as! PhotoCollectionViewCell
         
         if !hasPhotos{
             var spinnerView: UIView!
             spinnerView = MapViewController.displaySpinner(onView: cell)
             DispatchQueue.global(qos:.userInitiated).async {
-                
+
                 let imageURL = URL(string:self.images[indexPath.item])
                 if let imageFromCache = self.imageCache.object(forKey: ((imageURL?.absoluteString)! + "\(indexPath.row)") as NSString) {
                     self.img = imageFromCache

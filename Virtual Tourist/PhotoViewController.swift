@@ -164,6 +164,7 @@ class PhotoViewController: UIViewController{
                 print("\(error!)")
                 return
             }
+            
             if let myImage = myImage{
                 self.images = Array(Set(myImage))
                 print("Printed from flickr method \(self.images.count)")//print statement
@@ -190,6 +191,7 @@ class PhotoViewController: UIViewController{
                 }else if case 229...250 = self.images.count {
                     self.images = Array(self.images[229..<self.images.count])
                 }
+                
             }
             
             MapViewController.removeSpinner(spinner: spinnerView)

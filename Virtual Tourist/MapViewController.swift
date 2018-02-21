@@ -12,17 +12,16 @@ import CoreData
 
 class MapViewController: UIViewController{
     
-    var FLICKER_API_KEY = "ee684b4e6223a2050bf31b5f4ef93f61"
-    var coordinates: CLLocationCoordinate2D!
-    var managedObjectContext: NSManagedObjectContext!
-    var photo = [Photo]()
-    var pin = [Pin]()
-    var newPin = [Pin]()
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var deleteLabel: UILabel!
+    var coordinates: CLLocationCoordinate2D!
+    var managedObjectContext: NSManagedObjectContext!
+    var pin = [Pin]()
+    var newPin = [Pin]()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        managedObjectContext = CoreDataStack().persistentContainer.viewContext
         loadPinData()
     }
     
@@ -31,7 +30,7 @@ class MapViewController: UIViewController{
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(addAnnotation(press:)))
         mapView.addGestureRecognizer(longPress)
-    
+        
     }
     
     func removePinCoordinates() {
@@ -77,17 +76,13 @@ class MapViewController: UIViewController{
     
     func loadPinData() {
         
-        managedObjectContext = CoreDataStack().persistentContainer.viewContext
         let pinRequest:NSFetchRequest<Pin> = Pin.fetchRequest()
         pinRequest.returnsObjectsAsFaults = false
-        let photoRequest: NSFetchRequest<Photo> = Photo.fetchRequest()
-        photoRequest.returnsObjectsAsFaults = false
         
         do{
-            photo = try managedObjectContext.fetch(photoRequest)
             pin = try managedObjectContext.fetch(pinRequest)
-            for i in 0..<pin.count{
-                let coordinates = CLLocationCoordinate2D(latitude: (pin[i].latitude), longitude:  (pin[i].longitude))
+            for coordinate in pin{
+                let coordinates = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude:  coordinate.longitude)
                 pinCoordinates(coordinates)
             }
             
@@ -108,6 +103,7 @@ class MapViewController: UIViewController{
     }
     
     func processPhoto(_ newPin:[Pin]) {
+        
         if deleteLabel.isHidden{
             
             let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
@@ -149,21 +145,21 @@ extension MapViewController: MKMapViewDelegate{
         coordinates = view.annotation?.coordinate
         loadPinData(latitude: coordinates.latitude, longitude: coordinates.longitude)
         
-//        if !newPhoto.isEmpty && !deleteLabel.isHidden{
-//            for photo in newPhoto{
-//                managedObjectContext.delete(photo)
-//            }
-//            managedObjectContext.delete(newPin[0])
-//            if let annotations = view.annotation{
-//                mapView.removeAnnotation(annotations)
-//            }
-//            print(newPin)
-//            save()
-//
-//        }else{
+        //        if !newPhoto.isEmpty && !deleteLabel.isHidden{
+        //            for photo in newPhoto{
+        //                managedObjectContext.delete(photo)
+        //            }
+        //            managedObjectContext.delete(newPin[0])
+        //            if let annotations = view.annotation{
+        //                mapView.removeAnnotation(annotations)
+        //            }
+        //            print(newPin)
+        //            save()
+        //
+        //        }else{
         
-            processPhoto(newPin)
-   //    }
+        processPhoto(newPin)
+        //    }
     }
     
 }

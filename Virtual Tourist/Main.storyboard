@@ -72,16 +72,34 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="7ms-bJ-crH">
-                                <rect key="frame" x="0.0" y="24" width="414" height="212"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="242"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="212" id="Ua3-0R-dQL"/>
+                                    <constraint firstAttribute="height" constant="242" id="3J4-mU-zbB"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="ByN-NJ-7zc" id="l4r-L4-9Ky"/>
                                 </connections>
                             </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nz4-nt-hD6">
+                                <rect key="frame" x="0.0" y="694" width="414" height="42"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                <state key="normal" title="New Collection"/>
+                                <connections>
+                                    <action selector="newCollectionBtn:" destination="ByN-NJ-7zc" eventType="touchUpInside" id="hPZ-wS-dYB"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTV-LU-cnW">
+                                <rect key="frame" x="0.0" y="694" width="414" height="42"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <state key="normal" title="Remove Selected Pictures">
+                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="deleteButton:" destination="ByN-NJ-7zc" eventType="touchUpInside" id="8F2-0o-KAa"/>
+                                </connections>
+                            </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rtq-kJ-5Wu">
-                                <rect key="frame" x="0.0" y="237" width="414" height="457"/>
+                                <rect key="frame" x="0.0" y="250" width="414" height="448"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="LSw-ax-mx8">
                                     <size key="itemSize" width="128" height="95"/>
@@ -90,7 +108,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <label key="backgroundView" hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This pin has no images" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Oa6-qD-w7H">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="457"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="448"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
@@ -110,10 +128,10 @@
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstItem="DmZ-Mf-941" firstAttribute="top" secondItem="UJZ-K5-n8X" secondAttribute="top" id="2rE-oy-cbW"/>
-                                            <constraint firstAttribute="trailing" secondItem="DmZ-Mf-941" secondAttribute="trailing" id="MK5-9P-PHe"/>
-                                            <constraint firstItem="DmZ-Mf-941" firstAttribute="leading" secondItem="UJZ-K5-n8X" secondAttribute="leading" id="Q4r-Fm-zf2"/>
-                                            <constraint firstAttribute="bottom" secondItem="DmZ-Mf-941" secondAttribute="bottom" id="Rkq-Pv-yTl"/>
+                                            <constraint firstAttribute="trailing" secondItem="DmZ-Mf-941" secondAttribute="trailing" id="48N-AD-hAt"/>
+                                            <constraint firstItem="DmZ-Mf-941" firstAttribute="top" secondItem="UJZ-K5-n8X" secondAttribute="top" id="UBU-nQ-ZnU"/>
+                                            <constraint firstAttribute="bottom" secondItem="DmZ-Mf-941" secondAttribute="bottom" id="k3P-hr-L6h"/>
+                                            <constraint firstItem="DmZ-Mf-941" firstAttribute="leading" secondItem="UJZ-K5-n8X" secondAttribute="leading" id="nbM-5j-wAc"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="photoImage" destination="DmZ-Mf-941" id="S4W-ia-kko"/>
@@ -126,45 +144,22 @@
                                     <outlet property="prefetchDataSource" destination="ByN-NJ-7zc" id="hA9-Em-np4"/>
                                 </connections>
                             </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nz4-nt-hD6">
-                                <rect key="frame" x="0.0" y="694" width="414" height="42"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="42" id="1cO-WG-bS3"/>
-                                </constraints>
-                                <state key="normal" title="New Collection"/>
-                                <connections>
-                                    <action selector="newCollectionBtn:" destination="ByN-NJ-7zc" eventType="touchUpInside" id="hPZ-wS-dYB"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTV-LU-cnW">
-                                <rect key="frame" x="0.0" y="694" width="414" height="42"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="42" id="xHI-cw-3qi"/>
-                                </constraints>
-                                <state key="normal" title="Remove Selected Pictures"/>
-                                <connections>
-                                    <action selector="deleteButton:" destination="ByN-NJ-7zc" eventType="touchUpInside" id="8F2-0o-KAa"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="bottom" secondItem="INV-EX-7PS" secondAttribute="bottom" id="2As-Fb-Cde"/>
-                            <constraint firstAttribute="trailing" secondItem="7ms-bJ-crH" secondAttribute="trailing" id="7md-GG-K1I"/>
-                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="trailing" secondItem="Nz4-nt-hD6" secondAttribute="trailing" id="7t3-no-bYK"/>
-                            <constraint firstItem="7ms-bJ-crH" firstAttribute="leading" secondItem="rtq-kJ-5Wu" secondAttribute="leading" id="BNL-LA-Nw1"/>
-                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="top" secondItem="7ms-bJ-crH" secondAttribute="bottom" constant="1" id="De6-3G-dMN"/>
-                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="leading" secondItem="Nz4-nt-hD6" secondAttribute="leading" id="Fh1-cu-QmG"/>
-                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="QXe-1h-R3U"/>
-                            <constraint firstItem="7ms-bJ-crH" firstAttribute="top" secondItem="INV-EX-7PS" secondAttribute="top" constant="4" id="RnZ-m9-7JB"/>
-                            <constraint firstItem="vTV-LU-cnW" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="Tpf-yf-Uoe"/>
-                            <constraint firstAttribute="bottom" secondItem="vTV-LU-cnW" secondAttribute="bottom" id="Wam-7t-YNd"/>
-                            <constraint firstItem="7ms-bJ-crH" firstAttribute="trailing" secondItem="rtq-kJ-5Wu" secondAttribute="trailing" id="XqG-8r-vfo"/>
-                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="YCl-ZX-pFj"/>
-                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="bottom" secondItem="INV-EX-7PS" secondAttribute="bottom" id="j8s-Xb-Y40"/>
-                            <constraint firstItem="vTV-LU-cnW" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="ssG-Ms-ahu"/>
-                            <constraint firstItem="7ms-bJ-crH" firstAttribute="leading" secondItem="DkQ-7A-qjs" secondAttribute="leading" id="uGC-9y-AIc"/>
-                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="top" secondItem="rtq-kJ-5Wu" secondAttribute="bottom" id="v03-SH-NKX"/>
+                            <constraint firstItem="vTV-LU-cnW" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="26D-pb-LG0"/>
+                            <constraint firstItem="vTV-LU-cnW" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="3SQ-J3-dIX"/>
+                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="trailing" secondItem="vTV-LU-cnW" secondAttribute="trailing" id="9FT-H3-Bxs"/>
+                            <constraint firstItem="vTV-LU-cnW" firstAttribute="top" secondItem="rtq-kJ-5Wu" secondAttribute="bottom" constant="8" id="AhJ-DJ-sfr"/>
+                            <constraint firstItem="7ms-bJ-crH" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="Nt0-t3-zuk"/>
+                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="top" secondItem="7ms-bJ-crH" secondAttribute="bottom" constant="8" symbolic="YES" id="U1v-n6-Nf6"/>
+                            <constraint firstItem="7ms-bJ-crH" firstAttribute="top" secondItem="DkQ-7A-qjs" secondAttribute="top" id="VSl-Le-bU5"/>
+                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="leading" secondItem="vTV-LU-cnW" secondAttribute="leading" id="Vhj-MA-bBq"/>
+                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="Y6U-Cw-Yvv"/>
+                            <constraint firstItem="7ms-bJ-crH" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="bCI-Ci-WcI"/>
+                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="c2u-C6-0WH"/>
+                            <constraint firstItem="INV-EX-7PS" firstAttribute="bottom" secondItem="Nz4-nt-hD6" secondAttribute="bottom" id="jja-Z3-fkk"/>
+                            <constraint firstItem="vTV-LU-cnW" firstAttribute="bottom" secondItem="INV-EX-7PS" secondAttribute="bottom" id="tQ8-7l-1D6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="INV-EX-7PS"/>
                     </view>
@@ -177,8 +172,14 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IkY-f4-qvA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <collectionViewFlowLayout minimumLineSpacing="10" minimumInteritemSpacing="10" id="OHu-6A-TbK">
+                    <size key="itemSize" width="128" height="95"/>
+                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                </collectionViewFlowLayout>
             </objects>
-            <point key="canvasLocation" x="404.34782608695656" y="-47.282608695652179"/>
+            <point key="canvasLocation" x="400.00000000000006" y="-52.989130434782609"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="DbK-wf-oCk">

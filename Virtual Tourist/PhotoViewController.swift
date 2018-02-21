@@ -32,6 +32,7 @@ class PhotoViewController: UIViewController{
     
     
     override func viewWillAppear(_ animated: Bool) {
+        
         if !hasPhotos{
             flickrUpDateBatch()
             newCollectionBtn.isEnabled = false
@@ -51,6 +52,7 @@ class PhotoViewController: UIViewController{
         mapView.addAnnotation(annotation)
         setMapRegion(for: coordinates, animated: true, mapView)
         
+        navigationItem.rightBarButtonItem = editButtonItem
         
       //  let dataPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
       //  print(dataPath)
@@ -260,7 +262,8 @@ class PhotoViewController: UIViewController{
     }
     
     func delete() {
-        var twoDArray = collectionView.indexPathsForSelectedItems
+       var twoDArray = collectionView.indexPathsForSelectedItems
+        let items = twoDArray.map{$0}?.sorted().reversed()
         
         if !pin.isEmpty{
            
@@ -286,6 +289,13 @@ class PhotoViewController: UIViewController{
         removeBtn.isHidden = true
     }
     
+    
+    
+//    override func setEditing(_ editing: Bool, animated: Bool) {
+//        super.setEditing(editing, animated: animated)
+//        <#code#>
+//    }
+//
     @IBAction func newCollectionBtn(_ sender: Any) {
         deleteAndCreate()
     }

@@ -37,6 +37,7 @@ class PhotoViewController: UIViewController{
             flickrUpDateBatch()
             newCollectionBtn.isEnabled = false
         }
+        
     }
     
     override func viewDidLoad() {
@@ -54,9 +55,10 @@ class PhotoViewController: UIViewController{
         
         navigationItem.rightBarButtonItem = editButtonItem
         
-      //  let dataPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-      //  print(dataPath)
+        //  let dataPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        //  print(dataPath)
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         saveData.removeAll()
         images.removeAll()
@@ -107,7 +109,7 @@ class PhotoViewController: UIViewController{
             }
             
             newPhoto = Array(Set(newPhoto))
-        
+            
         }catch{
             print("caught an error\(error)")
         }
@@ -134,15 +136,15 @@ class PhotoViewController: UIViewController{
         if !saveData.isEmpty{
             save()
         }else if !pin.isEmpty{
-                managedObjectContext.delete(pin[0])
-                save()
-             newCollectionBtn.isEnabled = true
+            managedObjectContext.delete(pin[0])
+            save()
+            newCollectionBtn.isEnabled = true
             navigationController?.popViewController(animated: true)
-            }
-        
         }
+        
+    }
     
-    func save(){
+    func save() {
         
         do{
             try managedObjectContext.save()
@@ -208,11 +210,11 @@ class PhotoViewController: UIViewController{
         
     }
     
-    func deleteAndCreate(){
+    func deleteAndCreate() {
         
         newCollectionBtn.isEnabled = false
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(savePinData), object: nil)
-       loadPinData(latitude: coordinates.latitude, longitude: coordinates.longitude)
+        loadPinData(latitude: coordinates.latitude, longitude: coordinates.longitude)
         
         if !pin.isEmpty{
             managedObjectContext.delete(pin[0])
@@ -226,10 +228,10 @@ class PhotoViewController: UIViewController{
         
         collectionView.performBatchUpdates({
             if images.isEmpty && hasPhotos{
-            batchUpdate(&newPhoto)
+                batchUpdate(&newPhoto)
             }
             flickrUpDateBatch()
-                      }, completion: nil)
+        }, completion: nil)
         
         newCollectionBtn.isEnabled = false
         
@@ -244,58 +246,54 @@ class PhotoViewController: UIViewController{
         }
     }
     
-    func deleteItems(_ twoDArray: inout [IndexPath], _ images: inout [String]){
-        for image in (twoDArray.sorted(by: >)){
-            images.remove(at: image.row)
-            let index = IndexPath(row: image.row, section: 0)
-            collectionView.deleteItems(at: [index])
-        }
-    }
-    
-    func deleteItems(_ twoDArray: inout [IndexPath], _ photo: inout[Photo]){
+    func deleteItems(){
         
-        for image in (twoDArray.sorted(by: >)){
-            photo.remove(at: image.row)
-            let index = IndexPath(row: image.row, section: 0)
-            collectionView.deleteItems(at: [index])
+        if let selected = collectionView.indexPathsForSelectedItems {
+            let items = selected.map{$0.item}.sorted().reversed()
+             print(selected, items)
+            if newPhoto.isEmpty && !hasPhotos{
+                for item in items {
+                    images.remove(at: item)
+                    let index = IndexPath(row: item, section: 0)
+                    collectionView.deleteItems(at: [index])
+                }
+            }else if images.isEmpty && hasPhotos{
+                for item in items {
+                    newPhoto.remove(at: item)
+                    let index = IndexPath(row: item, section: 0)
+                    collectionView.deleteItems(at: [index])
+                }
+            }
         }
+        
     }
     
     func delete() {
-       var twoDArray = collectionView.indexPathsForSelectedItems
-        let items = twoDArray.map{$0}?.sorted().reversed()
-        
         if !pin.isEmpty{
-           
-                for image in (twoDArray?.sorted(by: >))!{
-                    let photos = newPhoto[image.row]
-                    managedObjectContext.delete(photos)
-                }
-                save()
+            var twoDArray = collectionView.indexPathsForSelectedItems
+            for image in (twoDArray?.sorted(by: >))!{
+                let photos = newPhoto[image.row]
+                managedObjectContext.delete(photos)
+            }
+            save()
+         twoDArray?.removeAll()
         }
         
         collectionView.performBatchUpdates({
-            if !images.isEmpty && !hasPhotos{
-                deleteItems(&twoDArray!, &images)
-            }
-            
-            if images.isEmpty && hasPhotos {
-                deleteItems(&twoDArray!, &newPhoto)
-            }
-            
+            deleteItems()
         }, completion: nil)
-        twoDArray?.removeAll()
+   
         newCollectionBtn.isHidden = false
         removeBtn.isHidden = true
     }
     
     
     
-//    override func setEditing(_ editing: Bool, animated: Bool) {
-//        super.setEditing(editing, animated: animated)
-//        <#code#>
-//    }
-//
+    //    override func setEditing(_ editing: Bool, animated: Bool) {
+    //        super.setEditing(editing, animated: animated)
+    //        <#code#>
+    //    }
+    //
     @IBAction func newCollectionBtn(_ sender: Any) {
         deleteAndCreate()
     }
@@ -333,12 +331,12 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             
             print("Number of items in section \(newPhoto.count)")//print statement
             return newPhoto.count
-           
+            
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CELL", for: indexPath) as! PhotoCollectionViewCell
         
@@ -346,7 +344,7 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             var spinnerView: UIView!
             spinnerView = MapViewController.displaySpinner(onView: cell)
             DispatchQueue.global(qos:.userInitiated).async {
-
+                
                 let imageURL = URL(string:self.images[indexPath.item])
                 if let imageFromCache = self.imageCache.object(forKey: ((imageURL?.absoluteString)! + "\(indexPath.row)") as NSString) {
                     self.img = imageFromCache
@@ -378,6 +376,7 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
         return CGSize(width:(UIScreen.main.bounds.width-20)/3, height:95)
     }
     

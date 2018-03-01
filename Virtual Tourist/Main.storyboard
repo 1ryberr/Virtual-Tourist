@@ -80,35 +80,37 @@
                                     <outlet property="delegate" destination="ByN-NJ-7zc" id="l4r-L4-9Ky"/>
                                 </connections>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nz4-nt-hD6">
-                                <rect key="frame" x="0.0" y="694" width="414" height="42"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nz4-nt-hD6">
+                                <rect key="frame" x="0.0" y="706" width="414" height="30"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                                <state key="normal" title="New Collection"/>
+                                <state key="normal" title="New Collection">
+                                    <color key="titleColor" red="0.20464232960088991" green="0.059328674634360201" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="newCollectionBtn:" destination="ByN-NJ-7zc" eventType="touchUpInside" id="hPZ-wS-dYB"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTV-LU-cnW">
-                                <rect key="frame" x="0.0" y="694" width="414" height="42"/>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTV-LU-cnW">
+                                <rect key="frame" x="0.0" y="706" width="414" height="30"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <state key="normal" title="Remove Selected Pictures">
-                                    <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="titleColor" red="1" green="0.085168484720000007" blue="0.069792039190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
                                     <action selector="deleteButton:" destination="ByN-NJ-7zc" eventType="touchUpInside" id="8F2-0o-KAa"/>
                                 </connections>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rtq-kJ-5Wu">
-                                <rect key="frame" x="0.0" y="250" width="414" height="448"/>
+                                <rect key="frame" x="0.0" y="243" width="414" height="463"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="LSw-ax-mx8">
-                                    <size key="itemSize" width="128" height="95"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" sectionInsetReference="layoutMargins" id="LSw-ax-mx8">
+                                    <size key="itemSize" width="160" height="160"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <label key="backgroundView" hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This pin has no images" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Oa6-qD-w7H">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="448"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="463"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
@@ -116,22 +118,24 @@
                                 </label>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" restorationIdentifier="CELL" reuseIdentifier="CELL" id="UJZ-K5-n8X" customClass="PhotoCollectionViewCell" customModule="Virtual_Tourist" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="95"/>
+                                        <rect key="frame" x="8" y="8" width="160" height="160"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="95"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="DmZ-Mf-941">
-                                                    <rect key="frame" x="0.0" y="0.0" width="128" height="95"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="160" height="160"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="160" id="AMO-i3-0xK"/>
+                                                    </constraints>
                                                 </imageView>
                                             </subviews>
                                         </view>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="DmZ-Mf-941" secondAttribute="trailing" id="48N-AD-hAt"/>
-                                            <constraint firstItem="DmZ-Mf-941" firstAttribute="top" secondItem="UJZ-K5-n8X" secondAttribute="top" id="UBU-nQ-ZnU"/>
-                                            <constraint firstAttribute="bottom" secondItem="DmZ-Mf-941" secondAttribute="bottom" id="k3P-hr-L6h"/>
-                                            <constraint firstItem="DmZ-Mf-941" firstAttribute="leading" secondItem="UJZ-K5-n8X" secondAttribute="leading" id="nbM-5j-wAc"/>
+                                            <constraint firstItem="DmZ-Mf-941" firstAttribute="top" secondItem="UJZ-K5-n8X" secondAttribute="top" id="4c1-ta-5O4"/>
+                                            <constraint firstAttribute="trailing" secondItem="DmZ-Mf-941" secondAttribute="trailing" id="uyw-EF-o2v"/>
+                                            <constraint firstItem="DmZ-Mf-941" firstAttribute="leading" secondItem="UJZ-K5-n8X" secondAttribute="leading" id="wpJ-T7-W0f"/>
                                         </constraints>
                                         <connections>
                                             <outlet property="photoImage" destination="DmZ-Mf-941" id="S4W-ia-kko"/>
@@ -150,9 +154,9 @@
                             <constraint firstItem="vTV-LU-cnW" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="26D-pb-LG0"/>
                             <constraint firstItem="vTV-LU-cnW" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="3SQ-J3-dIX"/>
                             <constraint firstItem="rtq-kJ-5Wu" firstAttribute="trailing" secondItem="vTV-LU-cnW" secondAttribute="trailing" id="9FT-H3-Bxs"/>
-                            <constraint firstItem="vTV-LU-cnW" firstAttribute="top" secondItem="rtq-kJ-5Wu" secondAttribute="bottom" constant="8" id="AhJ-DJ-sfr"/>
+                            <constraint firstItem="vTV-LU-cnW" firstAttribute="top" secondItem="rtq-kJ-5Wu" secondAttribute="bottom" id="AhJ-DJ-sfr"/>
                             <constraint firstItem="7ms-bJ-crH" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="Nt0-t3-zuk"/>
-                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="top" secondItem="7ms-bJ-crH" secondAttribute="bottom" constant="8" symbolic="YES" id="U1v-n6-Nf6"/>
+                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="top" secondItem="7ms-bJ-crH" secondAttribute="bottom" constant="1" id="U1v-n6-Nf6"/>
                             <constraint firstItem="7ms-bJ-crH" firstAttribute="top" secondItem="DkQ-7A-qjs" secondAttribute="top" id="VSl-Le-bU5"/>
                             <constraint firstItem="rtq-kJ-5Wu" firstAttribute="leading" secondItem="vTV-LU-cnW" secondAttribute="leading" id="Vhj-MA-bBq"/>
                             <constraint firstItem="Nz4-nt-hD6" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="Y6U-Cw-Yvv"/>

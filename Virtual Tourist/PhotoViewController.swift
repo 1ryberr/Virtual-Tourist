@@ -18,6 +18,8 @@ class PhotoViewController: UIViewController{
     @IBOutlet weak var newCollectionBtn: UIButton!
     @IBOutlet weak var removeBtn: UIButton!
     @IBOutlet weak var noImages: UILabel!
+    @IBOutlet weak var isEditingBtn: UIButton!
+    
     var FLICKER_API_KEY = "ee684b4e6223a2050bf31b5f4ef93f61"
     var images = [String]()
     var hasPhotos: Bool!
@@ -116,12 +118,12 @@ class PhotoViewController: UIViewController{
         photo.removeAll()
     }
     
-    func setMapRegion(for location: CLLocationCoordinate2D, animated: Bool, _ mapView: MKMapView){
+    func setMapRegion(for location: CLLocationCoordinate2D, animated: Bool, _ mapView: MKMapView) {
         let viewRegion = MKCoordinateRegionMakeWithDistance(location,60000, 60000)
         mapView.setRegion(viewRegion, animated: animated)
     }
     
-    @objc func savePinData(){
+    @objc func savePinData() {
         let saveData = self.saveData.prefix(21)
         let pinObject = Pin(context: managedObjectContext)
         pinObject.latitude = coordinates.latitude
@@ -133,9 +135,9 @@ class PhotoViewController: UIViewController{
             pinObject.addToPhoto(photoObject)
             
         }
-        if !saveData.isEmpty{
+        if !saveData.isEmpty {
             save()
-        }else if !pin.isEmpty{
+        } else if !pin.isEmpty{
             managedObjectContext.delete(pin[0])
             save()
             newCollectionBtn.isEnabled = true
@@ -159,9 +161,6 @@ class PhotoViewController: UIViewController{
         
         var page = Int(arc4random_uniform(3)) + 1
         let FLICKER_LINK = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(FLICKER_API_KEY)&lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&extras=url_m&page=\(page)&format=json&nojsoncallback=1"
-        
-        var spinnerView: UIView
-        spinnerView = MapViewController.displaySpinner(onView: view)
         
         FlickrClient.sharedInstance.displayImageFromFlickrBySearch(url:FLICKER_LINK,completionHandlerForPOST: {myImage,error in
             guard (error == nil) else {
@@ -198,7 +197,6 @@ class PhotoViewController: UIViewController{
                 
             }
             
-            MapViewController.removeSpinner(spinner: spinnerView)
             DispatchQueue.main.async {
                 self.hasPhotos = false
                 self.collectionView.reloadData()
@@ -250,7 +248,6 @@ class PhotoViewController: UIViewController{
         
         if let selected = collectionView.indexPathsForSelectedItems {
             let items = selected.map{$0.item}.sorted().reversed()
-             print(selected, items)
             if newPhoto.isEmpty && !hasPhotos{
                 for item in items {
                     images.remove(at: item)
@@ -269,6 +266,7 @@ class PhotoViewController: UIViewController{
     }
     
     func delete() {
+        
         if !pin.isEmpty{
             var twoDArray = collectionView.indexPathsForSelectedItems
             for image in (twoDArray?.sorted(by: >))!{
@@ -276,30 +274,38 @@ class PhotoViewController: UIViewController{
                 managedObjectContext.delete(photos)
             }
             save()
-         twoDArray?.removeAll()
+            twoDArray?.removeAll()
         }
         
         collectionView.performBatchUpdates({
             deleteItems()
         }, completion: nil)
-   
+        
         newCollectionBtn.isHidden = false
         removeBtn.isHidden = true
+        
     }
     
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if !editing {
+            newCollectionBtn.isHidden = false
+            removeBtn.isHidden = true
+        } else {
+            collectionView.allowsMultipleSelection = true
+            newCollectionBtn.isHidden = true
+            removeBtn.isHidden = false
+        }
+        
+    }
     
-    
-    //    override func setEditing(_ editing: Bool, animated: Bool) {
-    //        super.setEditing(editing, animated: animated)
-    //        <#code#>
-    //    }
-    //
     @IBAction func newCollectionBtn(_ sender: Any) {
         deleteAndCreate()
     }
     
     @IBAction func deleteButton(_ sender: Any) {
         delete()
+        isEditing = false
     }
     
 }
@@ -377,24 +383,24 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        return CGSize(width:(UIScreen.main.bounds.width-20)/3, height:95)
+        return CGSize(width:(UIScreen.main.bounds.width - 20)/3, height:(UIScreen.main.bounds.width - 20)/3)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath)
-        cell?.alpha = cell?.alpha == 1 ? 0.5 : 1
-        collectionView.allowsMultipleSelection = true
-        newCollectionBtn.isHidden = true
-        removeBtn.isHidden = false
-        if cell?.alpha == 1 && (collectionView.indexPathsForSelectedItems?.contains(indexPath))!{
-            collectionView.deselectItem(at: indexPath, animated: true)
-            if (collectionView.indexPathsForSelectedItems?.isEmpty)!{
-                newCollectionBtn.isHidden = false
-                removeBtn.isHidden = true
-            }
-            
-        }
         
+        
+        if isEditing{
+            let cell = collectionView.cellForItem(at: indexPath)
+            cell?.alpha = cell?.alpha == 1 ? 0.5 : 1
+            if cell?.alpha == 1 && (collectionView.indexPathsForSelectedItems?.contains(indexPath))!{
+                collectionView.deselectItem(at: indexPath, animated: true)
+                if (collectionView.indexPathsForSelectedItems?.isEmpty)!{
+                    newCollectionBtn.isHidden = false
+                    removeBtn.isEnabled = false
+                }
+                
+            }
+        }
     }
     
     

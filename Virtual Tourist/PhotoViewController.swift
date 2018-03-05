@@ -15,10 +15,8 @@ class PhotoViewController: UIViewController{
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var newCollectionBtn: UIButton!
-    @IBOutlet weak var removeBtn: UIButton!
     @IBOutlet weak var noImages: UILabel!
-    @IBOutlet weak var isEditingBtn: UIButton!
+    @IBOutlet weak var deleteBarBtn: UIBarButtonItem!
     
     var FLICKER_API_KEY = "ee684b4e6223a2050bf31b5f4ef93f61"
     var images = [String]()
@@ -37,7 +35,6 @@ class PhotoViewController: UIViewController{
         
         if !hasPhotos{
             flickrUpDateBatch()
-            newCollectionBtn.isEnabled = false
         }
         
     }
@@ -50,20 +47,26 @@ class PhotoViewController: UIViewController{
         
         managedObjectContext = CoreDataStack().persistentContainer.viewContext
         loadPinData(latitude: coordinates.latitude, longitude: coordinates.longitude)
+        
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinates
         mapView.addAnnotation(annotation)
         setMapRegion(for: coordinates, animated: true, mapView)
-        
         navigationItem.rightBarButtonItem = editButtonItem
         
-        //  let dataPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        //  print(dataPath)
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(self.refresh), for: UIControlEvents.valueChanged)
+        collectionView?.refreshControl = refresh
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         saveData.removeAll()
         images.removeAll()
+    }
+    @objc func refresh() {
+    deleteAndCreate()
+    collectionView?.refreshControl?.endRefreshing()
     }
     
     @objc func handleLongGesture(gesture: UILongPressGestureRecognizer) {
@@ -140,7 +143,6 @@ class PhotoViewController: UIViewController{
         } else if !pin.isEmpty{
             managedObjectContext.delete(pin[0])
             save()
-            newCollectionBtn.isEnabled = true
             navigationController?.popViewController(animated: true)
         }
         
@@ -202,7 +204,6 @@ class PhotoViewController: UIViewController{
                 self.collectionView.reloadData()
             }
         })
-        self.newCollectionBtn.isEnabled = true
         imageCache.removeAllObjects()
         perform(#selector(savePinData), with: nil, afterDelay: 7)
         
@@ -210,7 +211,7 @@ class PhotoViewController: UIViewController{
     
     func deleteAndCreate() {
         
-        newCollectionBtn.isEnabled = false
+    
         NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(savePinData), object: nil)
         loadPinData(latitude: coordinates.latitude, longitude: coordinates.longitude)
         
@@ -231,7 +232,7 @@ class PhotoViewController: UIViewController{
             flickrUpDateBatch()
         }, completion: nil)
         
-        newCollectionBtn.isEnabled = false
+     
         
     }
     
@@ -268,6 +269,7 @@ class PhotoViewController: UIViewController{
     func delete() {
         
         if !pin.isEmpty{
+            
             var twoDArray = collectionView.indexPathsForSelectedItems
             for image in (twoDArray?.sorted(by: >))!{
                 let photos = newPhoto[image.row]
@@ -281,31 +283,26 @@ class PhotoViewController: UIViewController{
             deleteItems()
         }, completion: nil)
         
-        newCollectionBtn.isHidden = false
-        removeBtn.isHidden = true
+     navigationController?.isToolbarHidden = true
         
     }
     
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if !editing {
-            newCollectionBtn.isHidden = false
-            removeBtn.isHidden = true
+           navigationController?.isToolbarHidden = true
         } else {
             collectionView.allowsMultipleSelection = true
-            newCollectionBtn.isHidden = true
-            removeBtn.isHidden = false
+            self.navigationItem.rightBarButtonItem = self.deleteBarBtn
         }
         
     }
     
-    @IBAction func newCollectionBtn(_ sender: Any) {
-        deleteAndCreate()
-    }
-    
-    @IBAction func deleteButton(_ sender: Any) {
+    @IBAction func deleteBtn(_ sender: Any) {
         delete()
         isEditing = false
+         self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
     }
     
 }
@@ -330,7 +327,6 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if !hasPhotos {
             noImages.isHidden = !(self.images.count == 0)
-            newCollectionBtn.isEnabled = !(self.images.count == 0)
             print("Number of items in section \(images.count)")//print statement
             return images.count
         }else{
@@ -395,14 +391,12 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             if cell?.alpha == 1 && (collectionView.indexPathsForSelectedItems?.contains(indexPath))!{
                 collectionView.deselectItem(at: indexPath, animated: true)
                 if (collectionView.indexPathsForSelectedItems?.isEmpty)!{
-                    newCollectionBtn.isHidden = false
-                    removeBtn.isEnabled = false
+                   navigationController?.isToolbarHidden = true
                 }
                 
             }
         }
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         print("Starting Index:  \(sourceIndexPath.item)" )

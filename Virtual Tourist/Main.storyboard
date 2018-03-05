@@ -61,7 +61,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-466.66666666666669" y="-9.7826086956521738"/>
+            <point key="canvasLocation" x="-629" y="-50"/>
         </scene>
         <!--Photo View Controller-->
         <scene sceneID="OIH-6y-jVY">
@@ -80,28 +80,8 @@
                                     <outlet property="delegate" destination="ByN-NJ-7zc" id="l4r-L4-9Ky"/>
                                 </connections>
                             </mapView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nz4-nt-hD6">
-                                <rect key="frame" x="0.0" y="706" width="414" height="30"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
-                                <state key="normal" title="New Collection">
-                                    <color key="titleColor" red="0.20464232960088991" green="0.059328674634360201" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="newCollectionBtn:" destination="ByN-NJ-7zc" eventType="touchUpInside" id="hPZ-wS-dYB"/>
-                                </connections>
-                            </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vTV-LU-cnW">
-                                <rect key="frame" x="0.0" y="706" width="414" height="30"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <state key="normal" title="Remove Selected Pictures">
-                                    <color key="titleColor" red="1" green="0.085168484720000007" blue="0.069792039190000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="deleteButton:" destination="ByN-NJ-7zc" eventType="touchUpInside" id="8F2-0o-KAa"/>
-                                </connections>
-                            </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rtq-kJ-5Wu">
-                                <rect key="frame" x="0.0" y="243" width="414" height="463"/>
+                                <rect key="frame" x="0.0" y="243" width="414" height="449"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="2" minimumInteritemSpacing="2" sectionInsetReference="layoutMargins" id="LSw-ax-mx8">
                                     <size key="itemSize" width="160" height="160"/>
@@ -110,7 +90,7 @@
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <label key="backgroundView" hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This pin has no images" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Oa6-qD-w7H">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="463"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="449"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <nil key="textColor"/>
@@ -151,31 +131,31 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="vTV-LU-cnW" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="26D-pb-LG0"/>
-                            <constraint firstItem="vTV-LU-cnW" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="3SQ-J3-dIX"/>
-                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="trailing" secondItem="vTV-LU-cnW" secondAttribute="trailing" id="9FT-H3-Bxs"/>
-                            <constraint firstItem="vTV-LU-cnW" firstAttribute="top" secondItem="rtq-kJ-5Wu" secondAttribute="bottom" id="AhJ-DJ-sfr"/>
+                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="leading" secondItem="7ms-bJ-crH" secondAttribute="leading" id="BSr-U9-U9c"/>
+                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="trailing" secondItem="7ms-bJ-crH" secondAttribute="trailing" id="MzE-fl-KrH"/>
                             <constraint firstItem="7ms-bJ-crH" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="Nt0-t3-zuk"/>
+                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="bottom" secondItem="INV-EX-7PS" secondAttribute="bottom" id="TAN-Z7-w9D"/>
                             <constraint firstItem="rtq-kJ-5Wu" firstAttribute="top" secondItem="7ms-bJ-crH" secondAttribute="bottom" constant="1" id="U1v-n6-Nf6"/>
                             <constraint firstItem="7ms-bJ-crH" firstAttribute="top" secondItem="DkQ-7A-qjs" secondAttribute="top" id="VSl-Le-bU5"/>
-                            <constraint firstItem="rtq-kJ-5Wu" firstAttribute="leading" secondItem="vTV-LU-cnW" secondAttribute="leading" id="Vhj-MA-bBq"/>
-                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="leading" secondItem="INV-EX-7PS" secondAttribute="leading" id="Y6U-Cw-Yvv"/>
                             <constraint firstItem="7ms-bJ-crH" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="bCI-Ci-WcI"/>
-                            <constraint firstItem="Nz4-nt-hD6" firstAttribute="trailing" secondItem="INV-EX-7PS" secondAttribute="trailing" id="c2u-C6-0WH"/>
-                            <constraint firstItem="INV-EX-7PS" firstAttribute="bottom" secondItem="Nz4-nt-hD6" secondAttribute="bottom" id="jja-Z3-fkk"/>
-                            <constraint firstItem="vTV-LU-cnW" firstAttribute="bottom" secondItem="INV-EX-7PS" secondAttribute="bottom" id="tQ8-7l-1D6"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="INV-EX-7PS"/>
                     </view>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="rtq-kJ-5Wu" id="CWN-QI-4em"/>
+                        <outlet property="deleteBarBtn" destination="YmM-PY-zhA" id="5eV-nx-GKv"/>
                         <outlet property="mapView" destination="7ms-bJ-crH" id="ZaY-ff-NbK"/>
-                        <outlet property="newCollectionBtn" destination="Nz4-nt-hD6" id="EKt-Np-a8a"/>
                         <outlet property="noImages" destination="Oa6-qD-w7H" id="D6i-JT-asN"/>
-                        <outlet property="removeBtn" destination="vTV-LU-cnW" id="51d-IP-aQf"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IkY-f4-qvA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <barButtonItem systemItem="trash" id="YmM-PY-zhA">
+                    <connections>
+                        <action selector="deleteBtn:" destination="ByN-NJ-7zc" id="3XX-dG-ebA"/>
+                    </connections>
+                </barButtonItem>
                 <collectionViewFlowLayout minimumLineSpacing="10" minimumInteritemSpacing="10" id="OHu-6A-TbK">
                     <size key="itemSize" width="128" height="95"/>
                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -183,7 +163,7 @@
                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                 </collectionViewFlowLayout>
             </objects>
-            <point key="canvasLocation" x="400.00000000000006" y="-52.989130434782609"/>
+            <point key="canvasLocation" x="155" y="-51"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="DbK-wf-oCk">

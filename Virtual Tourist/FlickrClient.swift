@@ -48,7 +48,7 @@ func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @esca
         }
         
         guard (error == nil) else {
-            sendError("There was an error with your request: \(error)")
+            sendError("There was an error with your request: \(error?.localizedDescription)")
             return
         }
         

@@ -64,6 +64,7 @@ class PhotoViewController: UIViewController{
         saveData.removeAll()
         images.removeAll()
     }
+    
     @objc func refresh() {
     deleteAndCreate()
     collectionView?.refreshControl?.endRefreshing()
@@ -324,6 +325,7 @@ extension PhotoViewController: MKMapViewDelegate{
 }
 
 extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if !hasPhotos {
             noImages.isHidden = !(self.images.count == 0)
@@ -346,7 +348,7 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             var spinnerView: UIView!
             spinnerView = MapViewController.displaySpinner(onView: cell)
             DispatchQueue.global(qos:.userInitiated).async {
-                
+                print(self.images)
                 let imageURL = URL(string:self.images[indexPath.item])
                 if let imageFromCache = self.imageCache.object(forKey: ((imageURL?.absoluteString)! + "\(indexPath.row)") as NSString) {
                     self.img = imageFromCache

@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 class CoreDataStack{
     lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Virtual_Tourist")
+        let container = NSPersistentContainer(name: "MyPhoto")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 
@@ -19,8 +19,6 @@ class CoreDataStack{
         })
         return container
     }()
-    
-    // MARK: - Core Data Saving support
     
     func saveContext () {
         let context = persistentContainer.viewContext

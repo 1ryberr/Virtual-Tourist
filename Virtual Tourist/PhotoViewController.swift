@@ -350,7 +350,7 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             DispatchQueue.global(qos:.userInitiated).async {
                 print(self.images)
                 let imageURL = URL(string:self.images[indexPath.item])
-                if let imageFromCache = self.imageCache.object(forKey: ((imageURL?.absoluteString)! + "\(indexPath.row)") as NSString) {
+                if let imageFromCache: UIImage = self.imageCache.object(forKey: ((imageURL?.absoluteString)! + "\(indexPath.row)") as NSString) {
                     self.img = imageFromCache
                 }else{
                     if let imageData = try? Data(contentsOf: imageURL!){

@@ -14,8 +14,5 @@ class PhotoCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         self.layer.cornerRadius = 6
         layer.borderWidth = 2
-        
     }
-
-    
 }

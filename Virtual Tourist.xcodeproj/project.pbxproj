@@ -7,29 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		583C3C9020B6CBFE007860DC /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583C3C8F20B6CBFE007860DC /* PhotoCollectionViewCell.swift */; };
+		583C3C9220B6CC36007860DC /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583C3C9120B6CC36007860DC /* CoreDataStack.swift */; };
 		58B055CF20157B370088856C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B055CE20157B370088856C /* AppDelegate.swift */; };
 		58B055D720157B380088856C /* Virtual_Tourist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 58B055D520157B380088856C /* Virtual_Tourist.xcdatamodeld */; };
 		58B055D920157B380088856C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58B055D820157B380088856C /* Assets.xcassets */; };
 		58B055DC20157B380088856C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58B055DA20157B380088856C /* LaunchScreen.storyboard */; };
-		58B055E420157B910088856C /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B055E320157B900088856C /* CoreDataStack.swift */; };
 		58B055E620157B9E0088856C /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B055E520157B9E0088856C /* MapViewController.swift */; };
 		58B055E820157BA80088856C /* PhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B055E720157BA80088856C /* PhotoViewController.swift */; };
-		58B055EA20157BB50088856C /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B055E920157BB50088856C /* PhotoCollectionViewCell.swift */; };
 		58B055EC20157BDD0088856C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58B055EB20157BDC0088856C /* Main.storyboard */; };
 		58B055EE20157BEE0088856C /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B055ED20157BEE0088856C /* FlickrClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		583C3C8F20B6CBFE007860DC /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
+		583C3C9120B6CC36007860DC /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		58B055CB20157B370088856C /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58B055CE20157B370088856C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		58B055D620157B380088856C /* Virtual_Tourist.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Virtual_Tourist.xcdatamodel; sourceTree = "<group>"; };
 		58B055D820157B380088856C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58B055DB20157B380088856C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		58B055DD20157B380088856C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		58B055E320157B900088856C /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		58B055E520157B9E0088856C /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		58B055E720157BA80088856C /* PhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoViewController.swift; sourceTree = "<group>"; };
-		58B055E920157BB50088856C /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		58B055EB20157BDC0088856C /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		58B055ED20157BEE0088856C /* FlickrClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,16 +65,16 @@
 			isa = PBXGroup;
 			children = (
 				58B055CE20157B370088856C /* AppDelegate.swift */,
-				58B055E320157B900088856C /* CoreDataStack.swift */,
 				58B055E520157B9E0088856C /* MapViewController.swift */,
 				58B055E720157BA80088856C /* PhotoViewController.swift */,
-				58B055E920157BB50088856C /* PhotoCollectionViewCell.swift */,
 				58B055ED20157BEE0088856C /* FlickrClient.swift */,
 				58B055EB20157BDC0088856C /* Main.storyboard */,
 				58B055D820157B380088856C /* Assets.xcassets */,
 				58B055DA20157B380088856C /* LaunchScreen.storyboard */,
 				58B055DD20157B380088856C /* Info.plist */,
 				58B055D520157B380088856C /* Virtual_Tourist.xcdatamodeld */,
+				583C3C8F20B6CBFE007860DC /* PhotoCollectionViewCell.swift */,
+				583C3C9120B6CC36007860DC /* CoreDataStack.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -151,12 +151,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				583C3C9220B6CC36007860DC /* CoreDataStack.swift in Sources */,
 				58B055D720157B380088856C /* Virtual_Tourist.xcdatamodeld in Sources */,
 				58B055CF20157B370088856C /* AppDelegate.swift in Sources */,
 				58B055EE20157BEE0088856C /* FlickrClient.swift in Sources */,
 				58B055E620157B9E0088856C /* MapViewController.swift in Sources */,
-				58B055EA20157BB50088856C /* PhotoCollectionViewCell.swift in Sources */,
-				58B055E420157B910088856C /* CoreDataStack.swift in Sources */,
+				583C3C9020B6CBFE007860DC /* PhotoCollectionViewCell.swift in Sources */,
 				58B055E820157BA80088856C /* PhotoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

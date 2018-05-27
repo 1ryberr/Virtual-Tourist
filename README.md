@@ -3,4 +3,4 @@
 
 ![alt text][ScreenShot]
 
-[ScreenShot]: https://github.com/1ryberr/MyPhoto/blob/master/IMG_142D4DEBCFBA-1.jpeg
+[ScreenShot]: https://github.com/1ryberr/Virtual-Tourist/blob/master/IMG_0007.PNG

@@ -64,7 +64,7 @@ func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @esca
         
         let parsedResult: [String:AnyObject]!
         do {
-            parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as! [String:AnyObject]
+            parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:AnyObject]
         } catch {
             sendError("Could not parse the data as JSON: '\(data)'")
             return
@@ -82,7 +82,7 @@ func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @esca
             sendError("Cannot find keys '\("photos")' and '\("photo")' in \(parsedResult)")
             return
         }
-        
+    
         if !photoArray.isEmpty {
             let myImages = self.collectData(photoArray)
             completionHandlerForPOST(myImages, nil)

@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import CoreData
+import Network
 
 
 class PhotoViewController: UIViewController{
@@ -34,14 +35,37 @@ class PhotoViewController: UIViewController{
     override func viewWillAppear(_ animated: Bool) {
         
         if !hasPhotos{
-            flickrUpDateBatch()
+            
+            if #available(iOS 12.0, *) {
+                let monitor = NWPathMonitor()
+                
+                monitor.pathUpdateHandler = { path in
+                    if path.status == .satisfied {
+                        self.flickrUpDateBatch()
+                        print("We're connected!")
+                    } else {
+                        print("No connection.")
+                    }
+                    
+                    print(path.isExpensive)
+                }
+                let queue = DispatchQueue(label: "Monitor")
+                monitor.start(queue: queue)
+                
+                
+                
+            } else {
+                 self.flickrUpDateBatch()
+            }
+            
+        
         }
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+    
         longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.handleLongGesture(gesture:)))
         collectionView.addGestureRecognizer(longPressGesture)
         
@@ -55,7 +79,7 @@ class PhotoViewController: UIViewController{
         navigationItem.rightBarButtonItem = editButtonItem
         
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(self.refresh), for: UIControlEvents.valueChanged)
+        refresh.addTarget(self, action: #selector(self.refresh), for: UIControl.Event.valueChanged)
         collectionView?.refreshControl = refresh
 
     }
@@ -123,7 +147,7 @@ class PhotoViewController: UIViewController{
     }
     
     func setMapRegion(for location: CLLocationCoordinate2D, animated: Bool, _ mapView: MKMapView) {
-        let viewRegion = MKCoordinateRegionMakeWithDistance(location,60000, 60000)
+        let viewRegion = MKCoordinateRegion.init(center: location,latitudinalMeters: 60000, longitudinalMeters: 60000)
         mapView.setRegion(viewRegion, animated: animated)
     }
     
@@ -162,7 +186,7 @@ class PhotoViewController: UIViewController{
     
     func flickrUpDateBatch() {
         
-        var page = Int(arc4random_uniform(3)) + 1
+        let page = Int(arc4random_uniform(3)) + 1
         let FLICKER_LINK = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(FLICKER_API_KEY)&lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&extras=url_m&page=\(page)&format=json&nojsoncallback=1"
         
         FlickrClient.sharedInstance.displayImageFromFlickrBySearch(url:FLICKER_LINK,completionHandlerForPOST: {myImage,error in
@@ -203,10 +227,15 @@ class PhotoViewController: UIViewController{
             DispatchQueue.main.async {
                 self.hasPhotos = false
                 self.collectionView.reloadData()
+                self.perform(#selector(self.savePinData), with: nil, afterDelay: 7)
+                
             }
+            
+            
         })
         imageCache.removeAllObjects()
-        perform(#selector(savePinData), with: nil, afterDelay: 7)
+        
+       
         
     }
     

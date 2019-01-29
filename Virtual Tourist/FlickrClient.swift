@@ -8,6 +8,19 @@
 
 import UIKit
 
+struct FlickrPagedImageResult:  Codable {
+    let photos: Photos?
+  //  let stat: String
+}
+struct Photos: Codable {
+    var photo: [ImageURL]
+}
+struct ImageURL: Codable{
+    let url: URL?
+    enum CodingKeys: String, CodingKey{
+        case url = "url_m"
+    }
+}
 
 class FlickrClient: NSObject {
     
@@ -16,24 +29,8 @@ class FlickrClient: NSObject {
     var imageURL: URL!
     var imageData: Data!
    
-    
-    func collectData( _ photoArray: [[String : AnyObject]])->[String] {
-        var image = [String]()
-        var photoDictionary:[String:AnyObject]!
-        for i in 0..<photoArray.count{
-            photoDictionary = photoArray[i] as [String:AnyObject]
-            guard let imageUrlString = photoDictionary["url_m"] as? String else {
-                print("Cannot find key '\("url_m")' in \(photoDictionary)")
-                continue
-            }
-            
-           image.append(imageUrlString)
-        }
-    return image
-}
 
-
-func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @escaping (_ myImages: [String]?, _ error: NSError?) -> Void) -> URLSessionDataTask{
+func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @escaping (_ myImages: [URL]?, _ error: NSError?) -> Void) -> URLSessionDataTask{
     
     let url = URL(string: url)!
     let request = URLRequest(url: url)
@@ -61,33 +58,30 @@ func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @esca
             sendError("No data was returned by the request!")
             return
         }
-        
-        let parsedResult: [String:AnyObject]!
+     
+        let parsedResult: FlickrPagedImageResult?
+        let decoder = JSONDecoder()
+
         do {
-            parsedResult = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String:AnyObject]
-        } catch {
+            parsedResult =  try decoder.decode(FlickrPagedImageResult.self, from: data)
+          
+            
+        }catch{
             sendError("Could not parse the data as JSON: '\(data)'")
             return
+
         }
         
-        guard let stat = parsedResult["stat"] as? String, stat == "ok" else {
-            sendError("Flickr API returned an error. See error code and message in \(parsedResult)")
-            return
-        }
+        var imageArray: [URL] = []
         
-        guard let photosDictionary = parsedResult["photos"] as? [String:AnyObject]else{
-            return
+        for item in (parsedResult?.photos?.photo)! {
+            imageArray.append(item.url!)
         }
-        guard let photoArray = photosDictionary["photo"] as? [[String:AnyObject]] else {
-            sendError("Cannot find keys '\("photos")' and '\("photo")' in \(parsedResult)")
-            return
-        }
-    
-        if !photoArray.isEmpty {
-            let myImages = self.collectData(photoArray)
-            completionHandlerForPOST(myImages, nil)
+
+        if !imageArray.isEmpty {
+            completionHandlerForPOST(imageArray, nil)
         }else{
-            let myImages: [String] = []
+            let myImages: [URL] = []
             completionHandlerForPOST(myImages, nil)
         }
     }

@@ -20,7 +20,7 @@ class PhotoViewController: UIViewController{
     @IBOutlet weak var deleteBarBtn: UIBarButtonItem!
     
     var FLICKER_API_KEY = "ee684b4e6223a2050bf31b5f4ef93f61"
-    var images = [String]()
+    var myImages = [URL]()
     var hasPhotos: Bool!
     var saveData = [Data]()
     var managedObjectContext: NSManagedObjectContext!
@@ -58,7 +58,6 @@ class PhotoViewController: UIViewController{
                  self.flickrUpDateBatch()
             }
             
-        
         }
         
     }
@@ -86,7 +85,7 @@ class PhotoViewController: UIViewController{
     
     override func viewWillDisappear(_ animated: Bool) {
         saveData.removeAll()
-        images.removeAll()
+        myImages.removeAll()
     }
     
     @objc func refresh() {
@@ -130,7 +129,7 @@ class PhotoViewController: UIViewController{
             pin = try managedObjectContext.fetch(pinRequest)
             photo = try managedObjectContext.fetch(photoRequest)
             
-            if images.isEmpty && hasPhotos{
+            if myImages.isEmpty && hasPhotos{
                 
                 for image in photo where image.pin?.objectID == pin[0].objectID{
                     newPhoto.append(image)
@@ -189,39 +188,37 @@ class PhotoViewController: UIViewController{
         let page = Int(arc4random_uniform(3)) + 1
         let FLICKER_LINK = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(FLICKER_API_KEY)&lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&extras=url_m&page=\(page)&format=json&nojsoncallback=1"
         
-        FlickrClient.sharedInstance.displayImageFromFlickrBySearch(url:FLICKER_LINK,completionHandlerForPOST: {myImage,error in
+        FlickrClient.sharedInstance.displayImageFromFlickrBySearch(url:FLICKER_LINK,completionHandlerForPOST: {myImages,error in
             guard (error == nil) else {
                 print("\(error!)")
                 return
             }
-            
-            if let myImage = myImage{
-                self.images = Array(Set(myImage))
-                print("Printed from flickr method \(self.images.count)")//print statement
-                if case 19...40 = self.images.count {
-                    self.images = Array(self.images[19..<self.images.count])
-                }else if case 40...61 = self.images.count {
-                    self.images = Array(self.images[40..<self.images.count])
-                }else if case 61...82 = self.images.count {
-                    self.images = Array(self.images[61..<self.images.count])
-                }else if case 82...103 = self.images.count {
-                    self.images = Array(self.images[82..<self.images.count])
-                }else if case 103...124 = self.images.count {
-                    self.images = Array(self.images[103..<self.images.count])
-                }else if case 124...145 = self.images.count {
-                    self.images = Array(self.images[124..<self.images.count])
-                }else if case 145...166 = self.images.count {
-                    self.images = Array(self.images[145..<self.images.count])
-                }else if case 166...187 = self.images.count {
-                    self.images = Array(self.images[166..<self.images.count])
-                }else if case 187...208 = self.images.count {
-                    self.images = Array(self.images[187..<self.images.count])
-                }else if case 208...229 = self.images.count {
-                    self.images = Array(self.images[208..<self.images.count])
-                }else if case 229...250 = self.images.count {
-                    self.images = Array(self.images[229..<self.images.count])
+          
+            if myImages != nil{
+                self.myImages = myImages!
+                if case 19...40 = self.myImages.count {
+                    self.myImages = Array(self.myImages[19..<self.myImages.count])
+                }else if case 40...61 = self.myImages.count {
+                    self.myImages = Array(self.myImages[40..<self.myImages.count])
+                }else if case 61...82 = self.myImages.count {
+                    self.myImages = Array(self.myImages[61..<self.myImages.count])
+                }else if case 82...103 = self.myImages.count {
+                    self.myImages = Array(self.myImages[82..<self.myImages.count])
+                }else if case 103...124 = self.myImages.count {
+                    self.myImages = Array(self.myImages[103..<self.myImages.count])
+                }else if case 124...145 = self.myImages.count {
+                    self.myImages = Array(self.myImages[124..<self.myImages.count])
+                }else if case 145...166 = self.myImages.count {
+                    self.myImages = Array(self.myImages[145..<self.myImages.count])
+                }else if case 166...187 = self.myImages.count {
+                    self.myImages = Array(self.myImages[166..<self.myImages.count])
+                }else if case 187...208 = self.myImages.count {
+                    self.myImages = Array(self.myImages[187..<self.myImages.count])
+                }else if case 208...229 = self.myImages.count {
+                    self.myImages = Array(self.myImages[208..<self.myImages.count])
+                }else if case 229...250 = self.myImages.count {
+                    self.myImages = Array(self.myImages[229..<self.myImages.count])
                 }
-                
             }
             
             DispatchQueue.main.async {
@@ -234,9 +231,6 @@ class PhotoViewController: UIViewController{
             
         })
         imageCache.removeAllObjects()
-        
-       
-        
     }
     
     func deleteAndCreate() {
@@ -256,14 +250,11 @@ class PhotoViewController: UIViewController{
         }
         
         collectionView.performBatchUpdates({
-            if images.isEmpty && hasPhotos{
+            if myImages.isEmpty && hasPhotos{
                 batchUpdate(&newPhoto)
             }
             flickrUpDateBatch()
         }, completion: nil)
-        
-     
-        
     }
     
     func batchUpdate( _ images : inout [Photo]) {
@@ -281,11 +272,12 @@ class PhotoViewController: UIViewController{
             let items = selected.map{$0.item}.sorted().reversed()
             if newPhoto.isEmpty && !hasPhotos{
                 for item in items {
-                    images.remove(at: item)
+                    myImages.remove(at: item)
                     let index = IndexPath(row: item, section: 0)
                     collectionView.deleteItems(at: [index])
                 }
-            }else if images.isEmpty && hasPhotos{
+            }else if myImages.isEmpty && hasPhotos{
+                
                 for item in items {
                     newPhoto.remove(at: item)
                     let index = IndexPath(row: item, section: 0)
@@ -357,9 +349,9 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if !hasPhotos {
-            noImages.isHidden = !(self.images.count == 0)
-            print("Number of items in section \(images.count)")//print statement
-            return images.count
+            noImages.isHidden = !(self.myImages.count == 0)
+            print("Number of items in section \(myImages.count)")//print statement
+            return myImages.count
         }else{
             
             print("Number of items in section \(newPhoto.count)")//print statement
@@ -377,22 +369,21 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             var spinnerView: UIView!
             spinnerView = MapViewController.displaySpinner(onView: cell)
             DispatchQueue.global(qos:.userInitiated).async {
-                print(self.images)
-                let imageURL = URL(string:self.images[indexPath.item])
-                if let imageFromCache: UIImage = self.imageCache.object(forKey: ((imageURL?.absoluteString)! + "\(indexPath.row)") as NSString) {
+                print(self.myImages)
+                let imageURL = self.myImages[indexPath.item]
+                if let imageFromCache: UIImage = self.imageCache.object(forKey: ((imageURL.absoluteString) + "\(indexPath.row)") as NSString) {
                     self.img = imageFromCache
                 }else{
-                    if let imageData = try? Data(contentsOf: imageURL!){
-                        self.img = UIImage(data: imageData)!
+                    if let imageData = try? Data(contentsOf: imageURL){
+                        self.img = UIImage(data: imageData)
                         self.saveData.append(imageData)
-                        self.imageCache.setObject(self.img, forKey:((imageURL?.absoluteString)! + "\(indexPath.row)")as NSString)
+                        self.imageCache.setObject(self.img, forKey:((imageURL.absoluteString) + "\(indexPath.row)")as NSString)
                     }
                 }
                 DispatchQueue.main.async {
                     cell.photoImage.image = self.img
                     MapViewController.removeSpinner(spinner:spinnerView)
                 }
-                
             }
             
             

@@ -8,19 +8,7 @@
 
 import UIKit
 
-struct FlickrPagedImageResult:  Codable {
-    let photos: Photos?
-  //  let stat: String
-}
-struct Photos: Codable {
-    var photo: [ImageURL]
-}
-struct ImageURL: Codable{
-    let url: URL?
-    enum CodingKeys: String, CodingKey{
-        case url = "url_m"
-    }
-}
+
 
 class FlickrClient: NSObject {
     
@@ -64,8 +52,7 @@ func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @esca
 
         do {
             parsedResult =  try decoder.decode(FlickrPagedImageResult.self, from: data)
-          
-            
+    
         }catch{
             sendError("Could not parse the data as JSON: '\(data)'")
             return

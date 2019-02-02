@@ -19,7 +19,6 @@ class PhotoViewController: UIViewController{
     @IBOutlet weak var noImages: UILabel!
     @IBOutlet weak var deleteBarBtn: UIBarButtonItem!
     
-    var FLICKER_API_KEY = "ee684b4e6223a2050bf31b5f4ef93f61"
     var myImages = [URL]()
     var hasPhotos: Bool!
     var saveData = [Data]()
@@ -31,35 +30,8 @@ class PhotoViewController: UIViewController{
     var img : UIImage!
     var longPressGesture: UILongPressGestureRecognizer!
     
-    
     override func viewWillAppear(_ animated: Bool) {
-        
-        if !hasPhotos{
-            
-            if #available(iOS 12.0, *) {
-                let monitor = NWPathMonitor()
-                
-                monitor.pathUpdateHandler = { path in
-                    if path.status == .satisfied {
-                        self.flickrUpDateBatch()
-                        print("We're connected!")
-                    } else {
-                        print("No connection.")
-                    }
-                    
-                    print(path.isExpensive)
-                }
-                let queue = DispatchQueue(label: "Monitor")
-                monitor.start(queue: queue)
-                
-                
-                
-            } else {
-                 self.flickrUpDateBatch()
-            }
-            
-        }
-        
+        uploadData(hasPhotos)
     }
     
     override func viewDidLoad() {
@@ -89,8 +61,8 @@ class PhotoViewController: UIViewController{
     }
     
     @objc func refresh() {
-    deleteAndCreate()
-    collectionView?.refreshControl?.endRefreshing()
+       deleteAndCreate()
+       collectionView?.refreshControl?.endRefreshing()
     }
     
     @objc func handleLongGesture(gesture: UILongPressGestureRecognizer) {
@@ -172,6 +144,30 @@ class PhotoViewController: UIViewController{
         
     }
     
+    fileprivate func uploadData(_ hasPhotos: Bool) {
+        if !hasPhotos{
+            if #available(iOS 12.0, *) {
+                let monitor = NWPathMonitor()
+                
+                monitor.pathUpdateHandler = { path in
+                    if path.status == .satisfied {
+                        self.flickrUpDateBatch()
+                        print("We're connected!")
+                    } else {
+                        print("No connection.")
+                    }
+                    
+                    print(path.isExpensive)
+                }
+                let queue = DispatchQueue(label: "Monitor")
+                monitor.start(queue: queue)
+            } else {
+                self.flickrUpDateBatch()
+            }
+            
+        }
+    }
+    
     func save() {
         
         do{
@@ -185,10 +181,18 @@ class PhotoViewController: UIViewController{
     
     func flickrUpDateBatch() {
         
-        let page = Int(arc4random_uniform(3)) + 1
-        let FLICKER_LINK = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(FLICKER_API_KEY)&lat=\(coordinates.latitude)&lon=\(coordinates.longitude)&extras=url_m&page=\(page)&format=json&nojsoncallback=1"
+        let methodParameters = [
+            Constants.FlickrParameterKeys.Method: Constants.FlickrParameterValues.SearchMethod,
+            Constants.FlickrParameterKeys.APIKey: Constants.FlickrParameterValues.APIKey,
+            Constants.FlickrParameterKeys.Latitude:  "\(coordinates.latitude)",
+            Constants.FlickrParameterKeys.Longitude: "\(coordinates.longitude)",
+            Constants.FlickrParameterKeys.Extras: Constants.FlickrParameterValues.MediumURL,
+            Constants.FlickrParameterKeys.Format: Constants.FlickrParameterValues.ResponseFormat,
+            Constants.FlickrParameterKeys.Page:  "\(Int(arc4random_uniform(UInt32(10))) + 1)",
+            Constants.FlickrParameterKeys.NoJSONCallback: Constants.FlickrParameterValues.DisableJSONCallback
+        ]
         
-        FlickrClient.sharedInstance.displayImageFromFlickrBySearch(url:FLICKER_LINK,completionHandlerForPOST: {myImages,error in
+        FlickrClient.sharedInstance.displayImageFromFlickrBySearch(url:"\(flickrURLFromParameters(methodParameters as [String : AnyObject]))",completionHandlerForPOST: {myImages,error in
             guard (error == nil) else {
                 print("\(error!)")
                 return
@@ -227,8 +231,6 @@ class PhotoViewController: UIViewController{
                 self.perform(#selector(self.savePinData), with: nil, afterDelay: 7)
                 
             }
-            
-            
         })
         imageCache.removeAllObjects()
     }
@@ -265,6 +267,23 @@ class PhotoViewController: UIViewController{
             collectionView.deleteItems(at: [index])
         }
     }
+    
+    func flickrURLFromParameters(_ parameters: [String:AnyObject]) -> URL {
+        
+        var components = URLComponents()
+        components.scheme = Constants.Flickr.APIScheme
+        components.host = Constants.Flickr.APIHost
+        components.path = Constants.Flickr.APIPath
+        components.queryItems = [URLQueryItem]()
+        
+        for (key, value) in parameters {
+            let queryItem = URLQueryItem(name: key, value: "\(value)")
+            components.queryItems!.append(queryItem)
+        }
+        
+        return components.url!
+    }
+    
     
     func deleteItems(){
         
@@ -369,7 +388,6 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             var spinnerView: UIView!
             spinnerView = MapViewController.displaySpinner(onView: cell)
             DispatchQueue.global(qos:.userInitiated).async {
-                print(self.myImages)
                 let imageURL = self.myImages[indexPath.item]
                 if let imageFromCache: UIImage = self.imageCache.object(forKey: ((imageURL.absoluteString) + "\(indexPath.row)") as NSString) {
                     self.img = imageFromCache

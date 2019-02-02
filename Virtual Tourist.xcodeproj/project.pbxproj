@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		581EF73A2205C66A00568384 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 581EF7392205C66A00568384 /* Constants.swift */; };
 		583C3C9020B6CBFE007860DC /* PhotoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583C3C8F20B6CBFE007860DC /* PhotoCollectionViewCell.swift */; };
 		583C3C9220B6CC36007860DC /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 583C3C9120B6CC36007860DC /* CoreDataStack.swift */; };
 		58B055CF20157B370088856C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B055CE20157B370088856C /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		581EF7392205C66A00568384 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		583C3C8F20B6CBFE007860DC /* PhotoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCollectionViewCell.swift; sourceTree = "<group>"; };
 		583C3C9120B6CC36007860DC /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		58B055CB20157B370088856C /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +77,7 @@
 				58B055D520157B380088856C /* Virtual_Tourist.xcdatamodeld */,
 				583C3C8F20B6CBFE007860DC /* PhotoCollectionViewCell.swift */,
 				583C3C9120B6CC36007860DC /* CoreDataStack.swift */,
+				581EF7392205C66A00568384 /* Constants.swift */,
 			);
 			path = "Virtual Tourist";
 			sourceTree = "<group>";
@@ -159,6 +162,7 @@
 				58B055E620157B9E0088856C /* MapViewController.swift in Sources */,
 				583C3C9020B6CBFE007860DC /* PhotoCollectionViewCell.swift in Sources */,
 				58B055E820157BA80088856C /* PhotoViewController.swift in Sources */,
+				581EF73A2205C66A00568384 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,7 +17,7 @@ class FlickrClient: NSObject {
     var imageURL: URL!
     var imageData: Data!
    
-
+@discardableResult
 func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @escaping (_ myImages: [URL]?, _ error: NSError?) -> Void) -> URLSessionDataTask{
     
     let url = URL(string: url)!
@@ -33,7 +33,7 @@ func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @esca
         }
         
         guard (error == nil) else {
-            sendError("There was an error with your request: \(error?.localizedDescription)")
+            sendError("There was an error with your request: \(String(describing: error?.localizedDescription))")
             return
         }
         

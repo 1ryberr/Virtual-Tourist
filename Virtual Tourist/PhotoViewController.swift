@@ -123,7 +123,7 @@ class PhotoViewController: UIViewController{
     }
     
     @objc func savePinData() {
-        let saveData = self.saveData.prefix(21)
+        let saveData = self.saveData
         let pinObject = Pin(context: managedObjectContext)
         pinObject.latitude = coordinates.latitude
         pinObject.longitude = coordinates.longitude
@@ -228,7 +228,7 @@ class PhotoViewController: UIViewController{
             DispatchQueue.main.async {
                 self.hasPhotos = false
                 self.collectionView.reloadData()
-                self.perform(#selector(self.savePinData), with: nil, afterDelay: 7)
+              //  self.perform(#selector(self.savePinData), with: nil, afterDelay: 7)
                 
             }
         })
@@ -387,22 +387,44 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
         if !hasPhotos{
             var spinnerView: UIView!
             spinnerView = MapViewController.displaySpinner(onView: cell)
-            DispatchQueue.global(qos:.userInitiated).async {
-                let imageURL = self.myImages[indexPath.item]
-                if let imageFromCache: UIImage = self.imageCache.object(forKey: ((imageURL.absoluteString) + "\(indexPath.row)") as NSString) {
-                    self.img = imageFromCache
-                }else{
-                    if let imageData = try? Data(contentsOf: imageURL){
-                        self.img = UIImage(data: imageData)
-                        self.saveData.append(imageData)
-                        self.imageCache.setObject(self.img, forKey:((imageURL.absoluteString) + "\(indexPath.row)")as NSString)
-                    }
-                }
-                DispatchQueue.main.async {
-                    cell.photoImage.image = self.img
-                    MapViewController.removeSpinner(spinner:spinnerView)
-                }
-            }
+            
+                         let imageURL = self.myImages[indexPath.item]
+                        cell.downloadImage(url: imageURL, saveData: &self.saveData) { [weak self] image, saveData, error in
+                            let loadedImage: UIImage
+                            if error == nil {
+                                loadedImage = image!
+                               
+                                self?.saveData = saveData!
+                                if  self?.myImages.count == saveData?.count{
+                                    self?.savePinData()
+                                }
+                                
+                                DispatchQueue.main.async {
+                                    cell.photoImage.image = loadedImage
+                                   MapViewController.removeSpinner(spinner:spinnerView)
+                                }
+                            } else{
+                               MapViewController.removeSpinner(spinner:spinnerView)
+                            }
+                        }
+            
+            
+//            DispatchQueue.global(qos:.userInitiated).async {
+//                let imageURL = self.myImages[indexPath.item]
+//                if let imageFromCache: UIImage = self.imageCache.object(forKey: ((imageURL.absoluteString) + "\(indexPath.row)") as NSString) {
+//                    self.img = imageFromCache
+//                }else{
+//                    if let imageData = try? Data(contentsOf: imageURL){
+//                        self.img = UIImage(data: imageData)
+//                        self.saveData.append(imageData)
+//                        self.imageCache.setObject(self.img, forKey:((imageURL.absoluteString) + "\(indexPath.row)")as NSString)
+//                    }
+//                }
+//                DispatchQueue.main.async {
+//                    cell.photoImage.image = self.img
+//                    MapViewController.removeSpinner(spinner:spinnerView)
+//                }
+//            }
             
             
         }else {

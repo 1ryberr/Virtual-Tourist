@@ -81,7 +81,6 @@ class MapViewController: UIViewController{
         
         do{
             pin = try managedObjectContext.fetch(pinRequest)
-            print(pin)
             for coordinate in pin{
                 let coordinates = CLLocationCoordinate2D(latitude: coordinate.latitude, longitude:  coordinate.longitude)
                 pinCoordinates(coordinates)

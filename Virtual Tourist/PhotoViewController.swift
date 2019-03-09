@@ -30,6 +30,8 @@ class PhotoViewController: UIViewController{
     var img : UIImage!
     var longPressGesture: UILongPressGestureRecognizer!
     
+    
+
     override func viewWillAppear(_ animated: Bool) {
         uploadData(hasPhotos)
     }
@@ -57,7 +59,7 @@ class PhotoViewController: UIViewController{
     
     override func viewWillDisappear(_ animated: Bool) {
         saveData.removeAll()
-        myImages.removeAll()
+       // myImages.removeAll()
     }
     
     @objc func refresh() {
@@ -139,7 +141,6 @@ class PhotoViewController: UIViewController{
         } else if !pin.isEmpty{
             managedObjectContext.delete(pin[0])
             save()
-            navigationController?.popViewController(animated: true)
         }
         
     }
@@ -172,6 +173,10 @@ class PhotoViewController: UIViewController{
         
         do{
             try managedObjectContext.save()
+            DispatchQueue.main.async {
+            self.navigationController?.popViewController(animated: true)
+            }
+            
             print("saved")
             
         }catch{
@@ -228,8 +233,6 @@ class PhotoViewController: UIViewController{
             DispatchQueue.main.async {
                 self.hasPhotos = false
                 self.collectionView.reloadData()
-              //  self.perform(#selector(self.savePinData), with: nil, afterDelay: 7)
-                
             }
         })
         imageCache.removeAllObjects()
@@ -395,16 +398,17 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
                                 loadedImage = image!
                                
                                 self?.saveData = saveData!
+                               
                                 if  self?.myImages.count == saveData?.count{
                                     self?.savePinData()
                                 }
                                 
                                 DispatchQueue.main.async {
                                     cell.photoImage.image = loadedImage
-                                   MapViewController.removeSpinner(spinner:spinnerView)
+                                    MapViewController.removeSpinner(spinner: spinnerView)
                                 }
                             } else{
-                               MapViewController.removeSpinner(spinner:spinnerView)
+                                MapViewController.removeSpinner(spinner: spinnerView)
                             }
                         }
             
@@ -427,7 +431,7 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
 //            }
             
             
-        }else {
+        } else {
             
             DispatchQueue.global(qos:.userInitiated).async {
                 let img = UIImage(data: self.newPhoto[indexPath.row].photoURL! as Data)

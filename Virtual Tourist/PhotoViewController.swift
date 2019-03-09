@@ -19,7 +19,7 @@ class PhotoViewController: UIViewController{
     @IBOutlet weak var noImages: UILabel!
     @IBOutlet weak var deleteBarBtn: UIBarButtonItem!
     
-    var myImages = [URL]()
+    var images = [URL]()
     var hasPhotos: Bool!
     var saveData = [Data]()
     var managedObjectContext: NSManagedObjectContext!
@@ -55,11 +55,6 @@ class PhotoViewController: UIViewController{
         refresh.addTarget(self, action: #selector(self.refresh), for: UIControl.Event.valueChanged)
         collectionView?.refreshControl = refresh
 
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        saveData.removeAll()
-       // myImages.removeAll()
     }
     
     @objc func refresh() {
@@ -103,7 +98,7 @@ class PhotoViewController: UIViewController{
             pin = try managedObjectContext.fetch(pinRequest)
             photo = try managedObjectContext.fetch(photoRequest)
             
-            if myImages.isEmpty && hasPhotos{
+            if images.isEmpty && hasPhotos{
                 
                 for image in photo where image.pin?.objectID == pin[0].objectID{
                     newPhoto.append(image)
@@ -197,42 +192,19 @@ class PhotoViewController: UIViewController{
             Constants.FlickrParameterKeys.NoJSONCallback: Constants.FlickrParameterValues.DisableJSONCallback
         ]
         
-        FlickrClient.sharedInstance.displayImageFromFlickrBySearch(url:"\(flickrURLFromParameters(methodParameters as [String : AnyObject]))",completionHandlerForPOST: {myImages,error in
+        FlickrClient.sharedInstance.displayImageFromFlickrBySearch(url:"\(flickrURLFromParameters(methodParameters as [String : AnyObject]))",completionHandlerForPOST: {[weak self] myImages,error in
             guard (error == nil) else {
                 print("\(error!)")
                 return
             }
           
             if myImages != nil{
-                self.myImages = myImages!
-                if case 19...40 = self.myImages.count {
-                    self.myImages = Array(self.myImages[19..<self.myImages.count])
-                }else if case 40...61 = self.myImages.count {
-                    self.myImages = Array(self.myImages[40..<self.myImages.count])
-                }else if case 61...82 = self.myImages.count {
-                    self.myImages = Array(self.myImages[61..<self.myImages.count])
-                }else if case 82...103 = self.myImages.count {
-                    self.myImages = Array(self.myImages[82..<self.myImages.count])
-                }else if case 103...124 = self.myImages.count {
-                    self.myImages = Array(self.myImages[103..<self.myImages.count])
-                }else if case 124...145 = self.myImages.count {
-                    self.myImages = Array(self.myImages[124..<self.myImages.count])
-                }else if case 145...166 = self.myImages.count {
-                    self.myImages = Array(self.myImages[145..<self.myImages.count])
-                }else if case 166...187 = self.myImages.count {
-                    self.myImages = Array(self.myImages[166..<self.myImages.count])
-                }else if case 187...208 = self.myImages.count {
-                    self.myImages = Array(self.myImages[187..<self.myImages.count])
-                }else if case 208...229 = self.myImages.count {
-                    self.myImages = Array(self.myImages[208..<self.myImages.count])
-                }else if case 229...250 = self.myImages.count {
-                    self.myImages = Array(self.myImages[229..<self.myImages.count])
-                }
+                self?.images = myImages!
             }
             
             DispatchQueue.main.async {
-                self.hasPhotos = false
-                self.collectionView.reloadData()
+                self?.hasPhotos = false
+                self?.collectionView.reloadData()
             }
         })
         imageCache.removeAllObjects()
@@ -255,14 +227,14 @@ class PhotoViewController: UIViewController{
         }
         
         collectionView.performBatchUpdates({
-            if myImages.isEmpty && hasPhotos{
+            if images.isEmpty && hasPhotos{
                 batchUpdate(&newPhoto)
             }
             flickrUpDateBatch()
         }, completion: nil)
     }
     
-    func batchUpdate( _ images : inout [Photo]) {
+    func batchUpdate( _ images: inout [Photo]) {
         
         for image in (0..<images.count).reversed(){
             images.remove(at: image)
@@ -294,11 +266,11 @@ class PhotoViewController: UIViewController{
             let items = selected.map{$0.item}.sorted().reversed()
             if newPhoto.isEmpty && !hasPhotos{
                 for item in items {
-                    myImages.remove(at: item)
+                    images.remove(at: item)
                     let index = IndexPath(row: item, section: 0)
                     collectionView.deleteItems(at: [index])
                 }
-            }else if myImages.isEmpty && hasPhotos{
+            }else if images.isEmpty && hasPhotos{
                 
                 for item in items {
                     newPhoto.remove(at: item)
@@ -371,9 +343,9 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if !hasPhotos {
-            noImages.isHidden = !(self.myImages.count == 0)
-            print("Number of items in section \(myImages.count)")//print statement
-            return myImages.count
+            noImages.isHidden = !(self.images.count == 0)
+            print("Number of items in section \(images.count)")//print statement
+            return images.count
         }else{
             
             print("Number of items in section \(newPhoto.count)")//print statement
@@ -391,44 +363,26 @@ extension PhotoViewController: UICollectionViewDataSource,UICollectionViewDelega
             var spinnerView: UIView!
             spinnerView = MapViewController.displaySpinner(onView: cell)
             
-                         let imageURL = self.myImages[indexPath.item]
-                        cell.downloadImage(url: imageURL, saveData: &self.saveData) { [weak self] image, saveData, error in
-                            let loadedImage: UIImage
-                            if error == nil {
-                                loadedImage = image!
-                               
-                                self?.saveData = saveData!
-                               
-                                if  self?.myImages.count == saveData?.count{
-                                    self?.savePinData()
-                                }
-                                
-                                DispatchQueue.main.async {
-                                    cell.photoImage.image = loadedImage
-                                    MapViewController.removeSpinner(spinner: spinnerView)
-                                }
-                            } else{
-                                MapViewController.removeSpinner(spinner: spinnerView)
-                            }
-                        }
-            
-            
-//            DispatchQueue.global(qos:.userInitiated).async {
-//                let imageURL = self.myImages[indexPath.item]
-//                if let imageFromCache: UIImage = self.imageCache.object(forKey: ((imageURL.absoluteString) + "\(indexPath.row)") as NSString) {
-//                    self.img = imageFromCache
-//                }else{
-//                    if let imageData = try? Data(contentsOf: imageURL){
-//                        self.img = UIImage(data: imageData)
-//                        self.saveData.append(imageData)
-//                        self.imageCache.setObject(self.img, forKey:((imageURL.absoluteString) + "\(indexPath.row)")as NSString)
-//                    }
-//                }
-//                DispatchQueue.main.async {
-//                    cell.photoImage.image = self.img
-//                    MapViewController.removeSpinner(spinner:spinnerView)
-//                }
-//            }
+            DispatchQueue.global(qos:.userInitiated).async {
+                let imageURL = self.images[indexPath.item]
+                if let imageFromCache: UIImage = self.imageCache.object(forKey: ((imageURL.absoluteString) + "\(indexPath.row)") as NSString) {
+                    self.img = imageFromCache
+                }else{
+                    if let imageData = try? Data(contentsOf: imageURL){
+                        self.img = UIImage(data: imageData)
+                        self.saveData.append(imageData)
+                     if  self.saveData.count == 21{
+                         self.savePinData()
+                        self.saveData.removeAll()
+                       }
+                        self.imageCache.setObject(self.img, forKey:((imageURL.absoluteString) + "\(indexPath.row)")as NSString)
+                    }
+                }
+                DispatchQueue.main.async {
+                    cell.photoImage.image = self.img
+                    MapViewController.removeSpinner(spinner:spinnerView)
+                }
+            }
             
             
         } else {

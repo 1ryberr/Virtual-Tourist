@@ -14,10 +14,10 @@ class MapViewController: UIViewController{
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var deleteLabel: UILabel!
-    var coordinates: CLLocationCoordinate2D!
-    var managedObjectContext: NSManagedObjectContext!
-    var pin = [Pin]()
-    var newPin = [Pin]()
+    private var coordinates: CLLocationCoordinate2D!
+    private var managedObjectContext: NSManagedObjectContext!
+    private var pin = [Pin]()
+    private var newPin = [Pin]()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -108,8 +108,8 @@ class MapViewController: UIViewController{
             
             let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
             let viewController = storyboard.instantiateViewController(withIdentifier: "PhotoViewController") as! PhotoViewController
-            viewController.hasPhotos = !newPin.isEmpty
-            viewController.coordinates = self.coordinates
+            viewController.setHasPhotos(hasPhotos: !newPin.isEmpty) 
+            viewController.setCoordinates(coordinates: self.coordinates)
             self.navigationController?.pushViewController(viewController, animated: true)
         }
         

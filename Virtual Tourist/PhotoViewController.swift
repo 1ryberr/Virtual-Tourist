@@ -19,19 +19,18 @@ class PhotoViewController: UIViewController{
     @IBOutlet weak var noImages: UILabel!
     @IBOutlet weak var deleteBarBtn: UIBarButtonItem!
     
-    var images = [URL]()
-    var hasPhotos: Bool!
-    var saveData = [Data]()
-    var managedObjectContext: NSManagedObjectContext!
-    var coordinates: CLLocationCoordinate2D!
-    var pin = [Pin]()
-    var newPhoto = [Photo]()
-    let imageCache = NSCache<NSString, UIImage>()
-    var img : UIImage!
-    var longPressGesture: UILongPressGestureRecognizer!
+    private var images = [URL]()
+    private var hasPhotos: Bool!
+    private var saveData = [Data]()
+    private var managedObjectContext: NSManagedObjectContext!
+    private var coordinates: CLLocationCoordinate2D!
+    private var pin = [Pin]()
+    private var newPhoto = [Photo]()
+    private let imageCache = NSCache<NSString, UIImage>()
+    private var img : UIImage!
+    private var longPressGesture: UILongPressGestureRecognizer!
     
-    
-
+   
     override func viewWillAppear(_ animated: Bool) {
         uploadData(hasPhotos)
     }
@@ -57,6 +56,14 @@ class PhotoViewController: UIViewController{
 
     }
     
+    func setHasPhotos(hasPhotos: Bool){
+        self.hasPhotos = hasPhotos
+    }
+    
+    func setCoordinates(coordinates: CLLocationCoordinate2D){
+        self.coordinates = coordinates
+    }
+
     @objc func refresh() {
        deleteAndCreate()
        collectionView?.refreshControl?.endRefreshing()
@@ -119,7 +126,7 @@ class PhotoViewController: UIViewController{
         mapView.setRegion(viewRegion, animated: animated)
     }
     
-    @objc func savePinData() {
+    func savePinData() {
         let saveData = self.saveData
         let pinObject = Pin(context: managedObjectContext)
         pinObject.latitude = coordinates.latitude
@@ -140,7 +147,7 @@ class PhotoViewController: UIViewController{
         
     }
     
-    fileprivate func uploadData(_ hasPhotos: Bool) {
+     func uploadData(_ hasPhotos: Bool) {
         if !hasPhotos{
             if #available(iOS 12.0, *) {
                 let monitor = NWPathMonitor()
@@ -211,9 +218,7 @@ class PhotoViewController: UIViewController{
     }
     
     func deleteAndCreate() {
-        
     
-        NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(savePinData), object: nil)
         loadPinData(latitude: coordinates.latitude, longitude: coordinates.longitude)
         
         if !pin.isEmpty{

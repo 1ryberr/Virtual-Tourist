@@ -9,9 +9,6 @@
 import UIKit
 
 class PhotoCollectionViewCell: UICollectionViewCell {
-    
-     var img : UIImage!
-    var saveData = [Data]()
     @IBOutlet weak var photoImage: UIImageView!
     override func layoutSubviews() {
         self.layer.cornerRadius = 6

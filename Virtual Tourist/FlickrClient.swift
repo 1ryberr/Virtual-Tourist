@@ -14,8 +14,7 @@ class FlickrClient: NSObject {
     
     static let sharedInstance = FlickrClient()
     private override init() {}
-    var imageURL: URL!
-    var imageData: Data!
+ 
    
 @discardableResult
 func displayImageFromFlickrBySearch(url: String, completionHandlerForPOST: @escaping (_ myImages: [URL]?, _ error: NSError?) -> Void) -> URLSessionDataTask{
